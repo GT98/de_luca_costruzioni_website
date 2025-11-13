@@ -1,0 +1,69 @@
+.hero-section {
+  /* Impostazioni di base e sfondo */
+  position: relative;
+  width: 100%;
+  height: 60vh; /* Altezza media della sezione (60% dell'altezza della viewport) */
+  display: flex;
+  align-items: center; /* Centra il contenuto verticalmente */
+  justify-content: center; /* Centra il contenuto orizzontalmente */
+
+  /* Immagine di Sfondo */
+  background-image: url('/assets/images/hero_banner_mock_image.png'); /* Adatta il percorso! */
+  background-size: cover;
+  background-position: center;
+
+  color: white; /* Colore del testo */
+  text-align: center;
+  z-index: 1; /* Assicura che sia sotto l'header (z-index: 10) */
+}
+
+/* --- Overlay (Gradiente Scuro) --- */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2; /* Sta sopra l'immagine (z-index: 1), ma sotto il testo (z-index: 3) */
+
+  /* Gradiente scuro/nero semitrasparente come nello screenshot */
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* --- Contenuto (Testo e Breadcrumb) --- */
+.hero-content {
+  position: relative; /* Lo porta sopra l'overlay */
+  z-index: 3;
+}
+
+h1 {
+  /* Testo "AZIENDA" grande e in maiuscolo */
+  font-family: 'Bebas Neue', sans-serif; /* Usa il font Bebas Neue */
+  font-size: 4em;
+  letter-spacing: 5px;
+  margin: 0;
+  padding-bottom: 5px; /* Spazio sopra la breadcrumb */
+}
+
+/* --- Breadcrumb --- */
+.breadcrumb {
+  font-family: 'Outfit', sans-serif; /* Usa il font Outfit per la breadcrumb */
+  font-size: 1rem;
+  font-weight: 300;
+
+  a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #007bff; /* Colore blu all'hover */
+    }
+
+    &.active {
+      font-weight: 500;
+      color: #ccc; /* Il link attivo è leggermente spento */
+      pointer-events: none; /* Rende il link della pagina corrente non cliccabile */
+    }
+  }
+}

@@ -1,0 +1,63 @@
+.custom-button {
+  /* Stile di base del bottone */
+  display: flex; /* Usa flexbox per allineare testo e icona */
+  align-items: center; /* Centra verticalmente gli elementi */
+  justify-content: space-between; /* Spazia testo e icona */
+
+  // Larghezza e altezza approssimative dal tuo screenshot
+  // Regola queste dimensioni a tuo piacimento
+  padding: 12px 0.4375rem 12px 1.875rem; // Padding interno (top, right, bottom, left)
+  height: 3.4375rem; // Altezza
+
+  color: white; /* Colore del testo */
+  font-family: 'Outfit', sans-serif; /* Usa il tuo font Outfit */
+  font-size: 1.25em;
+  font-weight: 400;
+  border: none;
+  border-radius: 60px; /* Bordi arrotondati */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Transizione per hover */
+
+  &.primary {
+    background-color: #19669f; /* Colore blu */
+  }
+  &.ghost {
+    background-color: transparent; /* Sfondo trasparente */
+    border: 1px solid white; /* Bordo bianco */
+  }
+
+  span {
+    margin-right: 1.6875rem; /* Spazio tra il testo e l'icona */
+    white-space: nowrap;
+  }
+
+  /* Stile per l'icona (il cerchio bianco con la freccia) */
+  .arrow-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 43px; /* Dimensioni del cerchio (come da screenshot) */
+    height: 43px;
+    border-radius: 50%; /* Rende il div un cerchio */
+    background-color: white; /* Colore bianco del cerchio */
+    /* Stile per l'SVG della freccia all'interno del cerchio */
+    svg {
+      width: 20px; /* Dimensione dell'icona della freccia */
+      height: 20px;
+      stroke: #333; /* Colore della freccia (un grigio scuro) */
+    }
+
+    /* Se usi Font Awesome, lo stile sarebbe simile */
+    /*
+      i {
+        font-size: 18px; 
+        color: #333; 
+      }
+      */
+  }
+
+  /* Effetto hover sul bottone */
+  &:hover {
+    background-color: #0056b3; /* Un blu più scuro all'hover */
+  }
+}

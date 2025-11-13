@@ -1,1 +1,16 @@
-<p>navbar works!</p>
+<nav class="navbar" [class.scrolled]="isScrolled()">
+    <div class="navbar-logo">
+        <img [src]="logoImage()" alt="Logo">
+    </div>
+    <div class="navbar-items">
+        <ul class="navbar-list">
+            <li><a [routerLink]="'/agency'">Azienda</a></li>
+            <li><a [routerLink]="'/services'">Servizi</a></li>
+            <li><a [routerLink]="'/portfolio'">Portfolio</a></li>
+            <li><a [routerLink]="'/contact'">Contatti</a></li>
+        </ul>
+        <div class="free_estimate">
+            <app-button [routerLink]="'/free_estimate'" [showIcon]="true" [text]="'Preventivo gratuito'"></app-button>
+        </div>
+    </div>
+</nav>

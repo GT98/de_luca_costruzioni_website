@@ -1,0 +1,11 @@
+<section class="hero_banner" [style.height]="bannerHeight()">
+    <div class="hero_content">
+        <h1>{{title() | titlecase}}</h1>
+        <div class="breadcrumb">
+            <a href="#">Home</a> /
+            <a href="#" class="active">{{title() | titlecase}}</a>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
+</section>

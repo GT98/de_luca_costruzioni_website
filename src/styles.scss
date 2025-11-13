@@ -3,6 +3,14 @@
 
 body {
   font-family: 'Outfit', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  box-sizing: border-box; // Assicura che padding e bordi siano inclusi nelle dimensioni degli elementi
+}
+
+main {
+  flex: 1; // Assicura che il contenuto centrale occupi lo spazio disponibile
 }
 
 h1,
@@ -12,4 +20,12 @@ h4,
 h5,
 h6 {
   font-family: 'Bebas Neue', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit; // Applica il box-sizing a tutti gli elementi
 }
