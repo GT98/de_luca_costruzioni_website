@@ -12,5 +12,6 @@ export class Button {
   showIcon = input<boolean>(false);
   kind = input<string>('primary');
   text = input<string>('');
+  fontSize = input<number>(1);
 
 }

@@ -6,12 +6,11 @@
 
   // Larghezza e altezza approssimative dal tuo screenshot
   // Regola queste dimensioni a tuo piacimento
-  padding: 12px 0.4375rem 12px 1.875rem; // Padding interno (top, right, bottom, left)
+  padding: 12px 1.6875rem 12px 1.6875rem; // Padding interno (top, right, bottom, left)
   height: 3.4375rem; // Altezza
 
   color: white; /* Colore del testo */
   font-family: 'Outfit', sans-serif; /* Usa il tuo font Outfit */
-  font-size: 1.25em;
   font-weight: 400;
   border: none;
   border-radius: 60px; /* Bordi arrotondati */
@@ -27,12 +26,12 @@
   }
 
   span {
-    margin-right: 1.6875rem; /* Spazio tra il testo e l'icona */
     white-space: nowrap;
   }
 
   /* Stile per l'icona (il cerchio bianco con la freccia) */
   .arrow-icon {
+    margin-left: 1.6875rem; /* Spazio tra il testo e l'icona */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,14 +45,6 @@
       height: 20px;
       stroke: #333; /* Colore della freccia (un grigio scuro) */
     }
-
-    /* Se usi Font Awesome, lo stile sarebbe simile */
-    /*
-      i {
-        font-size: 18px; 
-        color: #333; 
-      }
-      */
   }
 
   /* Effetto hover sul bottone */

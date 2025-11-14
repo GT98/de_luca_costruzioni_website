@@ -1,0 +1,186 @@
+$dark-bg: #1F1F1F;
+$text-color: #FFFFFF;
+$light-blue: #0090FF;
+$divider-color: #FFFFFF66;
+
+.app-footer {
+  background-color: $dark-bg;
+  color: $text-color;
+  font-family: 'Outfit', sans-serif; /* Usa il tuo font Outfit */
+  padding: 100px 80px 40px 80px; /* Top, Right, Bottom, Left padding */
+  position: relative;
+}
+
+.footer_img {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* --- Layout delle Colonne (Flexbox) --- */
+.footer-content {
+  display: flex;
+  justify-content: space-between; /* Distribuisce le colonne */
+  gap: 30px; /* Spazio tra le colonne */
+  max-width: 1400px; /* Limita la larghezza massima del contenuto */
+  margin: 0 auto; /* Centra il contenuto */
+  padding-bottom: 100px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    color: $light-blue;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.75rem;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* --- Stile Colonna Logo --- */
+.footer-col-logo {
+  flex-basis: 25%; /* Alloca un po' più di spazio per il logo */
+  align-items: flex-start;
+
+  img {
+    width: 270px; /* Larghezza del logo */
+    height: auto;
+    margin-bottom: 30px;
+  }
+
+  .cta {
+    font-size: 1rem;
+  }
+}
+
+.footer-button {
+  background: none;
+  color: $text-color;
+  border: 1px solid $text-color;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-weight: 500;
+
+  &:hover {
+    background-color: $light-blue;
+    border-color: $light-blue;
+  }
+}
+
+/* --- Stile Dettagli Aziendali e Contatti --- */
+.footer-col-details,
+.footer-col-contact {
+  flex-basis: 25%;
+  font-size: 1rem;
+
+  div {
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+}
+
+/* --- Stile Sitemap --- */
+.footer-col-sitemap {
+  flex-basis: 15%; /* Colonna più stretta */
+
+  a {
+    color: $text-color;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $light-blue;
+    }
+  }
+}
+
+/* --- Contatti e Social Media --- */
+.contact-info {
+  margin-bottom: 25px;
+  .label {
+    font-weight: bold;
+    min-width: 70px; /* Allinea i due punti */
+    display: inline-block;
+  }
+  p {
+    display: flex;
+    span {
+      display: inline-block;
+    }
+  }
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+
+  .social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background-color: white;
+    border-radius: 50%;
+    font-size: 1.2em;
+
+    /* Nota: Qui dovrai sostituire il testo del placeholder  con la tua libreria di icone (es. Font Awesome, o SVG) */
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $light-blue;
+      &:hover img {
+        content: url('/assets/icons/instagram_hover.svg'); // Cambia il percorso per ogni icona
+      }
+
+      &.facebook:hover img {
+        content: url('/assets/icons/facebook_hover.svg');
+      }
+
+      &.twitter:hover img {
+        content: url('/assets/icons/linkedin_hover.svg');
+      }
+
+      &.tiktok:hover img {
+        content: url('/assets/icons/tiktok_hover.svg');
+      }
+    }
+  }
+}
+
+/* --- Copyright e Separatore --- */
+.footer-bottom {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.separator {
+  border: none;
+  height: 1px;
+  background-color: $divider-color;
+  margin: 25px 0;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 1rem;
+  color: white;
+  font-weight: 400;
+
+  strong {
+    color: $text-color;
+    font-weight: 500;
+  }
+}
