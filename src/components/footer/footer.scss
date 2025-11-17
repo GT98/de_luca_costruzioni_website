@@ -15,14 +15,17 @@ $divider-color: #FFFFFF66;
   position: absolute;
   bottom: 0;
   right: 0;
+  pointer-events: none; /* Impedisce l'interazione con l'immagine */
 }
 
 /* --- Layout delle Colonne (Flexbox) --- */
 .footer-content {
   display: flex;
   justify-content: space-between; /* Distribuisce le colonne */
+  flex-direction: column;
+  flex-wrap: wrap;
   gap: 30px; /* Spazio tra le colonne */
-  max-width: 1400px; /* Limita la larghezza massima del contenuto */
+  max-width: 1440px; /* Limita la larghezza massima del contenuto */
   margin: 0 auto; /* Centra il contenuto */
   padding-bottom: 100px;
 }

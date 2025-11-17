@@ -6,8 +6,8 @@
 
   // Larghezza e altezza approssimative dal tuo screenshot
   // Regola queste dimensioni a tuo piacimento
-  padding: 12px 1.6875rem 12px 1.6875rem; // Padding interno (top, right, bottom, left)
-  height: 3.4375rem; // Altezza
+  padding: 12px 0.34375rem 12px 1.3875rem; // Padding interno (top, right, bottom, left)
+  height: 2.71875rem; // Altezza
 
   color: white; /* Colore del testo */
   font-family: 'Outfit', sans-serif; /* Usa il tuo font Outfit */
@@ -20,10 +20,15 @@
   &.primary {
     background-color: #19669f; /* Colore blu */
   }
+  &.secondary {
+    background-color: #FFFFFF;
+    color: #1F1F1F;
+  }
   &.ghost {
     background-color: transparent; /* Sfondo trasparente */
     border: 1px solid white; /* Bordo bianco */
   }
+
 
   span {
     white-space: nowrap;
@@ -35,14 +40,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 43px; /* Dimensioni del cerchio (come da screenshot) */
-    height: 43px;
+    width: 2.125rem; /* Dimensioni del cerchio (come da screenshot) */
+    height: 2.125rem;
     border-radius: 50%; /* Rende il div un cerchio */
     background-color: white; /* Colore bianco del cerchio */
     /* Stile per l'SVG della freccia all'interno del cerchio */
     svg {
-      width: 20px; /* Dimensione dell'icona della freccia */
-      height: 20px;
+      width: 15px; /* Dimensione dell'icona della freccia */
+      height: 15px;
       stroke: #333; /* Colore della freccia (un grigio scuro) */
     }
   }

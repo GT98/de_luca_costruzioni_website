@@ -1,5 +1,5 @@
 <button class="custom-button" [ngClass]="kind()" [style.font-size.rem]="fontSize()"
-    [style.padding-right.rem]="showIcon() ? 0.5 : 1.6875">
+    [style.padding-right.rem]="showIcon() ? kind() === 'ghost' ? 0.28125 : 0.34375 : 1.3875">
     <span>{{text()}}</span>
     @if(showIcon()){
     <div class="arrow-icon">

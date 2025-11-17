@@ -1,16 +1,33 @@
-<nav class="navbar" [class.scrolled]="isScrolled()">
-    <div class="navbar-logo">
-        <img [routerLink]="'/homepage'" [src]="logoImage()" alt="Logo">
+<div class="navbar" [class.scrolled]="isScrolled()">
+  <div class="navbar-content">
+    <div class="logo">
+      <img [routerLink]="'/homepage'" src="assets/images/logo_transparent.svg" />
     </div>
-    <div class="navbar-items">
-        <ul class="navbar-list">
-            <li><a [routerLink]="'/agency'">Azienda</a></li>
-            <li><a [routerLink]="'/services'">Servizi</a></li>
-            <li><a [routerLink]="'/portfolio'">Portfolio</a></li>
-            <li><a [routerLink]="'/contact'">Contatti</a></li>
-        </ul>
-        <div class="free_estimate">
-            <app-button [routerLink]="'/free_estimate'" [showIcon]="true" [text]="'Preventivo gratuito'"></app-button>
-        </div>
-    </div>
-</nav>
+    <ul class="navbar-items">
+      <li><a [routerLink]="'/homepage'">Home</a></li>
+      <li><a [routerLink]="'/agency'">Azienda</a></li>
+      <li><a [routerLink]="'/services'">Servizi</a></li>
+      <li><a [routerLink]="'/portfolio'">Portfolio</a></li>
+      <li><a [routerLink]="'/contact'">Contatti</a></li>
+      <div class="cta">
+        <app-button [routerLink]="'/free_estimate'" [kind]="'primary'" [text]="'Preventivo gratuito'"></app-button>
+      </div>
+      <div #el (click)="toggleMenu(el)" class="mobile-only ml-1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
+    </ul>
+  </div>
+</div>
+@if(isMenuOpened()){
+<div class="menu-mobile animation">
+  <ul>
+    <li><a [routerLink]="'/homepage'">Home</a></li>
+    <li><a [routerLink]="'/agency'">Azienda</a></li>
+    <li><a [routerLink]="'/services'">Servizi</a></li>
+    <li><a [routerLink]="'/portfolio'">Portfolio</a></li>
+    <li><a [routerLink]="'/contact'">Contatti</a></li>
+  </ul>
+</div>
+}

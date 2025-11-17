@@ -5,6 +5,7 @@ import Services from './pages/services/services';
 import Portfolio from './pages/portfolio/portfolio';
 import Contact from './pages/contact/contact';
 import { FreeEstimate } from './pages/free-estimate/free-estimate';
+import { PortfolioDetail } from './pages/portfolio-detail/portfolio-detail';
 
 export const routes: Routes = [
     { path: '', component: Home }, // Default route
@@ -12,6 +13,7 @@ export const routes: Routes = [
     { path: 'agency', component: Agency },
     { path: 'services', component: Services },
     { path: 'portfolio', component: Portfolio },
+    { path: 'portfolio/:id', component: PortfolioDetail},
     { path: 'contact', component: Contact },
     { path: 'free_estimate', component: FreeEstimate },
 ];

@@ -1,54 +1,184 @@
 .navbar {
-  display: flex;
-  justify-content: space-between;
   position: fixed;
-  top: 3.5rem;
-  width: 100%;
-  z-index: 1000;
-  transition: background-color 0.3s, color 0.3s;
-  background-color: transparent;
-  color: white;
-  padding: 0 6rem;
-  transition: 0.7s ease-in-out;
+  top: 0;
+  left: 0;
+  width: calc(100% - 11rem);
+  height: 5.5rem;
+  background: #00000080;
+  padding: 1rem 3rem;
+  margin: 0 5.625rem;
+  border: 1px solid #00000033;
+  border-radius: 1.25rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  z-index: 999;
 
-  &.scrolled {
-    background-color: #1F1F1F;
-    color: #0090FF;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    top: 0;
-    height: 6rem;
-    transition: 0.7s ease-in-out;
-  }
-
-  .navbar-logo {
+  .navbar-content {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    img {
-      height: 4rem;
-    }
-  }
+    height: 100%;
 
-  .navbar-items {
-    display: flex;
-    align-items: center;
-    .navbar-list {
+    .navbar-items {
+      text-transform: uppercase;
+      list-style-type: none;
       display: flex;
-      justify-content: space-around;
-      list-style: none;
-      margin: 0;
-      padding: 1rem 2rem;
-      gap: 3rem;
+      align-items: center;
+      justify-content: space-between;
+      color: #ffffff;
 
-      li a {
-        text-decoration: none;
-        color: inherit;
-        font-weight: bold;
-        transition: color 0.3s;
+      li {
+        margin-right: 3.125rem;
+        cursor: pointer;
 
         &:hover {
-          color: #007bff;
+          color: white;
         }
       }
     }
+  }
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media screen and (max-width: 500px) {
+  .mobile-only {
+    display: block;
+  }
+
+  .menu-mobile {
+    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.5019607843);
+    position: fixed;
+    color: #ffffff;
+    text-align: center;
+    top: 110px;
+    width: calc(100vw - 1rem);
+    border-radius: 1.25rem;
+    z-index: 99999;
+    left: 0.5rem;
+
+    &.animation {
+      animation: scroll-down 0.3s ease-in-out;
+    }
+
+    ul {
+      padding: 40px 60px;
+      list-style-type: none;
+      text-transform: uppercase;
+
+      li {
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+        border-bottom: 1px solid #ffff;
+        font-family: Outfit;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      li > a {
+        color: white;
+        text-decoration: none;
+      }
+
+      li:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  .container {
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .bar1,
+  .bar2,
+  .bar3 {
+    width: 23px;
+    height: 1px;
+    background-color: #ffffff;
+    margin: 6px 0;
+    transition: 0.4s;
+  }
+
+  .change .bar1 {
+    transform: translate(0, 7px) rotate(-45deg);
+  }
+
+  .change .bar2 {
+    opacity: 0;
+  }
+
+  .change .bar3 {
+    transform: translate(0, -7px) rotate(45deg);
+  }
+
+  .navbar {
+    position: fixed;
+    left: 0.5rem;
+    top: 0.5rem;
+    width: calc(100vw - 1rem);
+    height: 5.5rem;
+    background: transparent;
+    padding: 1rem 1rem;
+    margin: 0 !important;
+    border: none;
+    border-radius: 1.25rem;
+    z-index: 999;
+
+    &.scrolled {
+      background-color: #00000080;
+      backdrop-filter: blur(10px);
+      color: #0090ff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      top: 0.5rem;
+      height: 6rem;
+      transition: 0.7s ease-in-out;
+    }
+
+    .navbar-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .logo > img {
+        height: 2.275rem;
+      }
+
+      .navbar-items {
+        gap: 1rem;
+      }
+
+      .navbar-items > li {
+        text-transform: uppercase;
+        list-style-type: none;
+        display: none !important;
+        align-items: center;
+        justify-content: space-between;
+        color: #ffffff;
+
+        li {
+          margin-right: 3.125rem;
+          cursor: pointer;
+
+          &:hover {
+            color: red;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes scroll-down {
+  from {
+    top: -100%;
+  }
+
+  to {
+    top: 100px;
   }
 }

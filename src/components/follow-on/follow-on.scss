@@ -1,0 +1,130 @@
+$text-color: #0a0200;
+
+.social-section {
+  padding: 60px 0 60px 125px;
+  display: flex;
+  align-items: center;
+  gap: 100px;
+  justify-content: space-between;
+  background-color: #d9d9d966;
+
+  .text-content {
+    max-width: 450px;
+    flex: 1;
+    .title {
+      color: #19669f;
+      font-size: 4rem;
+    }
+    .subtitle,
+    .body-text {
+      color: #0a0200;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .body-text {
+      font-weight: 300;
+      font-size: 1rem;
+    }
+  }
+
+  .media-content {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+
+    height: 540px;
+
+    /* Usa una media query per ridurre l'altezza su schermi più piccoli */
+    @media (max-width: 1200px) {
+      height: 500px; /* Esempio: Inizia a ridursi gradualmente */
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      object-fit: cover;
+      object-position: 25% 0%;
+      display: block;
+    }
+  }
+
+  .social-tags {
+    display: flex;
+    gap: 40px;
+
+    &.tiktok {
+      position: absolute;
+      bottom: 5%;
+      left: 0%;
+      transform: translateX(-45%);
+    }
+
+    &.instagram {
+      position: absolute;
+      bottom: 19%;
+      left: 5%;
+    }
+
+    .tiktok-button,
+    .instagram-button {
+      /* Contenitore principale (465 x 107) */
+      display: flex;
+      align-items: center;
+      height: 60px;
+
+      background-color: white;
+      border-radius: 53.5px; /* Metà dell'altezza (107/2) per un bordo perfetto */
+
+      text-decoration: none; /* Rimuove la sottolineatura del link */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Leggera ombra, opzionale */
+
+      padding-right: 30px; /* Padding a destra per lo spazio finale */
+      transition: all 0.2s ease;
+
+      &:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    /* --- Wrapper Icona (85 x 85) --- */
+    .icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 40px;
+      height: 40px;
+
+      border-radius: 50%; /* Rende il contenitore circolare */
+
+      margin: 0 20px 0 11px; /* Spazio tra il bordo sinistro, l'icona e il testo */
+      flex-shrink: 0; /* Impedisce che l'icona si rimpicciolisca */
+
+      &.tiktok {
+        background-color: #1e1e1e; /* Colore nero di TikTok */
+      }
+      &.instagram {
+        background-color: #19669f; /* Colore nero di TikTok */
+      }
+    }
+
+    /* --- Icona SVG (40 x 40) --- */
+    .tiktok-icon,
+    .instagram-icon {
+      width: 35px;
+      height: 35px;
+      fill: white; /* Colore dell'icona all'interno del cerchio */
+    }
+
+    /* --- Nome Utente --- */
+    .username {
+      color: #0a0200;
+      font-family: 'Outfit', sans-serif; /* Usa il tuo font Outfit */
+      font-size: 1.2rem; /* Regola la dimensione per riempire lo spazio */
+      font-weight: 500;
+      white-space: nowrap;
+    }
+  }
+}

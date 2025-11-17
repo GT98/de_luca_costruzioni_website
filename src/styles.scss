@@ -1,11 +1,16 @@
 @import '@fontsource/bebas-neue';
-@import '@fontsource/outfit';
+@import '@fontsource/bebas-neue/400.css';
+@import '@fontsource/outfit/300.css'; // Light
+@import '@fontsource/outfit/400.css'; // Light
+@import '@fontsource/outfit/500.css'; // Medium
+@import '@fontsource/outfit/700.css'; // Bold
 
 body {
   font-family: 'Outfit', sans-serif;
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  font-weight: 400;
   box-sizing: border-box; // Assicura che padding e bordi siano inclusi nelle dimensioni degli elementi
 }
 
@@ -28,4 +33,12 @@ h6 {
 *::before,
 *::after {
   box-sizing: inherit; // Applica il box-sizing a tutti gli elementi
+}
+
+.container {
+  /* Limite la larghezza del contenuto */
+  max-width: 1440px;
+
+  /* Centra il contenitore orizzontalmente */
+  margin: 0 auto;
 }

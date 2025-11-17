@@ -1,0 +1,144 @@
+$primary-color: #19669f; /* Blu usato nel subtitle */
+$text-color: #1f1f1f;
+$icon-line-color: #ccc;
+
+.workflow-section {
+  padding: 80px 40px;
+  background-color: white; /* Sfondo bianco */
+  text-align: center;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* --- Intestazione --- */
+.header-text {
+  margin-bottom: 60px;
+
+  .subtitle {
+    color: $primary-color;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1.125rem;
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.125rem;
+    font-weight: 400;
+    color: $text-color;
+    margin: 0;
+    letter-spacing: 1px;
+  }
+}
+
+/* --- Contenitore Steps (Flexbox Orizzontale) --- */
+.steps-container {
+  display: flex;
+  align-items: flex-start; /* Allinea il contenuto in alto */
+  justify-content: center;
+  gap: 0; /* Lo spazio è gestito dai separatori e dal padding dei wrapper */
+  max-width: 1200px; /* Limita la larghezza */
+  margin: 0 auto;
+}
+
+/* --- Singolo Step --- */
+.workflow-step {
+  flex-basis: 25%; /* Ogni step occupa un quarto dello spazio disponibile */
+  padding: 0 15px; /* Spazio interno per separare i blocchi */
+}
+
+.icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 94px;
+  height: 94px;
+  margin: 0 auto 20px auto;
+  background: #f0f0f0;
+  border-radius: 100%;
+
+  /* Se usi SVG inline, applica lo stile */
+  img {
+    width: 54px;
+    height: 54px;
+    stroke: $text-color;
+    stroke-width: 1.5;
+  }
+}
+
+h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 25px;
+  color: $text-color;
+  margin: 15px 0 10px 0;
+  letter-spacing: 1px;
+}
+
+.workflow-step p {
+  font-size: 1rem;
+  color: #0A0200;
+  font-weight: 300;
+}
+
+/* --- Separatore Linea (Solo Desktop) --- */
+.separator {
+  position: relative;
+  width: 100px; /* Larghezza della linea tra gli step */
+  height: 147px; /* Stessa altezza dell'icona wrapper */
+  margin: 0 -5px; /* Sovrapposizione leggera per la linea */
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: $icon-line-color;
+  }
+}
+
+/* =================================================== */
+/* MODALITÀ RESPONSIVE (MOBILE)          */
+/* =================================================== */
+
+@media (max-width: 768px) {
+  .workflow-section {
+    padding: 50px 20px;
+  }
+
+  .steps-container {
+    /* Trasforma in colonna per impilare gli step */
+    flex-direction: column;
+    align-items: center; /* Centra orizzontalmente i blocchi */
+  }
+
+  .workflow-step {
+    /* Occupano l'intera larghezza, ma limitata per leggibilità */
+    flex-basis: auto;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 30px;
+  }
+
+  /* Nascondi il separatore tra i blocchi quando sono impilati */
+  .separator {
+    display: none;
+  }
+
+  /* Aggiungi un separatore verticale per la vista mobile (se necessario) */
+  .workflow-step:not(:last-child) {
+    position: relative;
+    padding-bottom: 30px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 20px;
+      background-color: $icon-line-color;
+    }
+  }
+}
