@@ -24,6 +24,11 @@
     background-color: #FFFFFF;
     color: #1F1F1F;
   }
+  &.tertiary {
+    background-color: transparent;
+    color: #1F1F1F;
+    border: 1px solid #1F1F1F;
+  }
   &.ghost {
     background-color: transparent; /* Sfondo trasparente */
     border: 1px solid white; /* Bordo bianco */

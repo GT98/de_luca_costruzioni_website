@@ -1,17 +1,26 @@
 .navbar {
   position: fixed;
-  top: 0;
+  top: 0.5rem;
   left: 0;
   width: calc(100% - 11rem);
   height: 5.5rem;
-  background: #00000080;
+  background: transparent;
   padding: 1rem 3rem;
   margin: 0 5.625rem;
-  border: 1px solid #00000033;
   border-radius: 1.25rem;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   z-index: 999;
+
+  &.scrolled {
+    background-color: #00000080;
+    backdrop-filter: blur(10px);
+    color: #0090ff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    top: 0.5rem;
+    height: 6rem;
+    transition: 0.7s ease-in-out;
+  }
 
   .navbar-content {
     display: flex;
@@ -35,6 +44,12 @@
           color: white;
         }
       }
+
+      li > a {
+        color: white;
+        text-decoration: none;
+      }
+      
     }
   }
 }
