@@ -1,0 +1,133 @@
+$text-color-dark: #333;
+$text-color-light: #666;
+$border-color: #ddd;
+$primary-color: #007bff;
+
+.user-form-section {
+  background-color: var(--user-form-bg-color, white); /* Usa una variabile CSS con fallback a 'white' */
+  padding: 80px 20px;
+  font-family: 'Outfit', sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+/* --- Wrapper principale (Limita la larghezza del form e del testo) --- */
+.form-wrapper {
+  max-width: 500px; /* Larghezza ideale per un modulo a colonna singola */
+  width: 100%;
+}
+
+/* --- Intestazione --- */
+.header-text {
+  text-align: left;
+  margin-bottom: 40px;
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5em;
+    line-height: 1.1;
+    color: $text-color-dark;
+    margin: 0 0 20px 0;
+    letter-spacing: 1px;
+  }
+  
+  p {
+    font-size: 0.95em;
+    color: $text-color-light;
+    line-height: 1.5;
+  }
+}
+
+/* --- Modulo --- */
+.user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Spazio tra gli input */
+}
+
+/* Stile comune per tutti gli input testuali e textarea */
+input[type="text"], 
+input[type="tel"], 
+input[type="email"], 
+textarea,
+.file-placeholder {
+  padding: 12px;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  font-size: 1em;
+  font-family: inherit;
+  color: $text-color-dark;
+  width: 100%;
+  box-sizing: border-box; /* Include padding e border nella larghezza */
+  transition: border-color 0.2s ease;
+  
+  &:focus {
+    border-color: $primary-color;
+    outline: none;
+  }
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+/* --- Gestione Input File --- */
+.document-label {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: $text-color-dark;
+  margin-top: 5px;
+}
+
+.file-input {
+  display: none; /* Nasconde l'input file di default del browser */
+}
+
+.file-placeholder {
+  cursor: pointer;
+  color: $text-color-light;
+}
+
+/* --- Checkbox Privacy --- */
+.privacy-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 15px 0;
+  
+  input[type="checkbox"] {
+    margin-top: 4px;
+    flex-shrink: 0; /* Impedisce che la checkbox si riduca */
+  }
+  
+  label {
+    font-size: 0.85em;
+    color: $text-color-light;
+    line-height: 1.4;
+    
+    strong {
+      font-weight: 600;
+    }
+  }
+}
+
+/* --- Bottone Submit --- */
+.submit-button {
+  background: none;
+  color: $text-color-dark;
+  border: 1px solid $text-color-dark;
+  padding: 12px 30px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: 500;
+  align-self: flex-start; /* Allinea il bottone a sinistra */
+  
+  &:hover {
+    background-color: $text-color-dark;
+    color: white;
+  }
+}
