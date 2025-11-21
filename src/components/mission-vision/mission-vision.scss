@@ -1,0 +1,58 @@
+$text-color-dark: #1f1f1f;
+$text-color-light: #0a0200;
+$highlight-color: #007bff; /* Usiamo un blu per la sottolineatura */
+
+.mission-vision-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* Limita e centra la larghezza di tutta la sezione */
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 87px 37px;
+  font-family: 'Outfit', sans-serif;
+  background-color: #d9d9d966;
+}
+
+/* --- Blocchi Mission/Vision --- */
+.mission-block,
+.vision-block {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 50px;
+}
+
+.title {
+  /* Stile Titolo: Molto grande e in grassetto (come nell'immagine) */
+  font-family: 'Bebas Neue', sans-serif; /* Presumendo che sia Bebas Neue */
+  font-size: 40px;
+  font-weight: 700;
+  color: $text-color-dark;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+
+.body-text {
+  font-size: 1em;
+  line-height: 1.6;
+  color: $text-color-light;
+  font-weight: 300;
+}
+
+/* --- Gestione Mobile (Opzionale) --- */
+@media (max-width: 600px) {
+  .title {
+    font-size: 2.2em;
+  }
+
+  .mission-block,
+  .vision-block {
+    margin-bottom: 40px;
+  }
+
+  .vision-block {
+    margin-bottom: 0;
+  }
+}

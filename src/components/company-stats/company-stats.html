@@ -1,0 +1,15 @@
+<section class="company-stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            @for(stat of stats; track stat.id) {
+            <div class="stat-item" [style.animation-delay]="$index * 0.1 + 's'">
+                <div class="stat-value">
+                    {{ stat.value }}
+                </div>
+                <div class="stat-title">{{ stat.title }}</div>
+                <p class="stat-description">{{ stat.description }}</p>
+            </div>
+            }
+        </div>
+    </div>
+</section>

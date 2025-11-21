@@ -1,0 +1,33 @@
+<section class="certifications-section">
+    <div class="container">
+        <h2 class="section-title">CERTIFICAZIONI</h2>
+        <p class="section-description">
+            Lorem ipsum dolor sit amet consectetur. In integer maecenas ultrices ipsum
+            tellus eleifend sollicitudin pellentesque. Rutrum ullamcorper ut imperdiet
+            nulla dui. Dignissim sit placerat aliquam eros mauris dignissim sapien.
+        </p>
+
+        <div class="swiper certifications-swiper">
+            <div class="swiper-wrapper">
+                @for(cert of certifications; track cert.name) {
+                <div class="swiper-slide">
+                    <div class="certification-card">
+                        <div class="cert-logo-container">
+                            <img [src]="cert.logo" [alt]="cert.name" class="cert-logo" />
+                        </div>
+                        <div class="cert-name">{{ cert.name }}</div>
+                        <p class="cert-description">{{ cert.description }}</p>
+                    </div>
+                </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            <div class="swiper-pagination"></div>
+
+            <!-- Navigation buttons (optional, hidden on mobile) -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </div>
+</section>

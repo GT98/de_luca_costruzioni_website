@@ -1,0 +1,133 @@
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
+.certifications-section {
+  padding: 80px 37px;
+  background-color: #ffff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+  color: #1a1a1a;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.section-description {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 60px;
+  line-height: 1.6;
+  color: #666;
+  font-size: 1rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 40px;
+    font-size: 0.95rem;
+  }
+}
+
+.certifications-swiper {
+  padding-bottom: 60px;
+
+  @media (max-width: 768px) {
+    padding-bottom: 50px;
+  }
+}
+
+.certification-card {
+  border-radius: 8px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cert-logo-container {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #19669f;
+  border-radius: 8px;
+  padding: 20px;
+
+  @media (max-width: 768px) {
+    width: 130px;
+    height: 130px;
+  }
+}
+
+.cert-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.cert-name {
+  font-family: Outfit;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 18px;
+  line-height: 26px;
+  letter-spacing: 0%;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
+}
+
+.cert-description {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+// Personalizzazione Swiper Pagination
+.swiper-pagination {
+  bottom: 0 !important;
+}
+
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: #c4c4c4;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background: #19669f;
+  width: 30px;
+  border-radius: 6px;
+}
+
+// Navigation buttons (nascosti su mobile)
+.swiper-button-prev,
+.swiper-button-next {
+  color: #19669f;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+
+  &::after {
+    font-size: 30px;
+  }
+}
