@@ -75,7 +75,7 @@ export class Certifications implements OnInit, OnDestroy {
       modules: [Navigation, Pagination, Autoplay],
       slidesPerView: 1,
       spaceBetween: 30,
-      loop: true,
+      loop: false,
       autoplay: {
         delay: 5000,
         disableOnInteraction: false,

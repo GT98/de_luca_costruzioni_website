@@ -1,0 +1,221 @@
+@import 'swiper/css';
+@import 'swiper/css/pagination';
+
+.portfolio-section {
+  padding: 80px 17px;
+  background-color: #ffffff;
+
+  @media (max-width: 768px) {
+    padding: 60px 37px;
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// ============================================
+// Header
+// ============================================
+.portfolio-header {
+  text-align: center;
+  margin-bottom: 60px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 40px;
+  }
+}
+
+.section-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1F1F1F;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  font-family: Outfit;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 18.12px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-transform: uppercase;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #19669f;
+  letter-spacing: 1px;
+  margin: 0;
+  font-family: Bebas Neue;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 50px;
+  line-height: 97%;
+  letter-spacing: 0%;
+  text-transform: uppercase;
+
+  @media (max-width: 768px) {
+    font-size: 50px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 50px;
+  }
+}
+
+// ============================================
+// Swiper Container
+// ============================================
+.portfolio-swiper {
+  padding-bottom: 20px;
+  margin: 0 -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+
+  @media (min-width: 768px) {
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .swiper-wrapper {
+    @media (max-width: 767px) {
+      padding-left: 0;
+    }
+  }
+}
+
+// ============================================
+// Project Card
+// ============================================
+.project-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+
+    .project-image {
+      transform: scale(1.05);
+    }
+
+    .project-overlay {
+      opacity: 1;
+    }
+  }
+}
+
+.project-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    height: 350px;
+  }
+
+  @media (max-width: 480px) {
+    height: 300px;
+  }
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+// ============================================
+// Overlay al Hover
+// ============================================
+.project-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(44, 123, 229, 0.7), rgba(44, 123, 229, 0.9));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  gap: 5px;
+}
+
+.overlay-content {
+  text-align: center;
+  color: white;
+  transform: translateY(20px);
+  transition: transform 0.4s ease;
+
+  .project-card:hover & {
+    transform: translateY(0);
+  }
+}
+
+.project-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: white;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+}
+
+.project-description {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+  }
+}
+
+// ============================================
+// Location Label
+// ============================================
+.project-location {
+  padding: 22px 12px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: left;
+  background-color: #fff;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    font-size: 1rem;
+  }
+}
+
+// ============================================
+// CTA Button
+// ============================================
+.portfolio-cta {
+  text-align: center;
+  margin-top: 60px;
+
+  @media (max-width: 768px) {
+    margin-top: 40px;
+  }
+}

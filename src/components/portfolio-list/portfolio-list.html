@@ -1,0 +1,35 @@
+<section class="portfolio-section">
+    <div class="container">
+        <!-- Header -->
+        <div class="portfolio-header">
+            <h3 class="section-label">PORTFOLIO</h3>
+            <h2 class="section-title">I NOSTRI PROGETTI</h2>
+        </div>
+
+        <!-- Swiper Container -->
+        <div class="swiper portfolio-swiper">
+            <div class="swiper-wrapper">
+                <div *ngFor="let project of projects" class="swiper-slide">
+
+                    <div class="project-card">
+                        <div class="project-image-wrapper">
+                            <img [src]="project.image" [alt]="project.title" class="project-image" loading="lazy">
+                            <div class="project-overlay">
+                                <div class="overlay-content">
+                                    <h3 class="project-title">{{ project.title }}</h3>
+                                    <p class="project-description" *ngIf="project.description">
+                                        {{ project.description }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-location">
+                            {{ project.location }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
