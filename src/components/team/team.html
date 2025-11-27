@@ -1,0 +1,58 @@
+<section class="team-section">
+    <div class="container">
+        <!-- Header -->
+        <div class="team-header">
+            <h3 class="section-label">TEAM</h3>
+            <h2 class="section-title">TEAM LOREM IPSUM<br>DOLOR SIT AMET.</h2>
+            <p class="section-description">
+                Lorem ipsum dolor sit amet consectetur. Augue neque sapien a egestas
+                fames. Ac convallis sodales in diam eu.
+            </p>
+        </div>
+
+        <!-- Team Grid -->
+        <div class="team-grid">
+            @for (member of teamMembers; track member.id) {
+            <div class="team-member-card">
+                <div class="member-image-wrapper">
+                    <img [src]="member.image" [alt]="member.name" class="member-image" loading="lazy">
+                    <div class="member-overlay">
+                        <div class="overlay-content">
+                            @if (member.bio) {
+                            <p class="member-bio">{{ member.bio }}</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="member-info">
+                    <div class="member-name">{{ member.name }}</div>
+                    <p class="member-role">{{ member.role }}</p>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+<!-- FOTO DI GRUPPO-->
+<section class="team-hero-section">
+    <div class="hero-container">
+
+        <img src="assets/images/team/team-full.png" alt="Il nostro team di esperti" class="hero-image">
+
+        <div class="image-overlay"></div>
+
+        <div class="hero-content">
+
+            <h1 class="hero-title">IL NOSTRO TEAM DI ESPERTI NEL SETTORE</h1>
+
+            <p class="hero-description">
+                Affidati a De Luca Costruzioni per una ristrutturazione completa e senza pensieri. Gestiamo ogni aspetto
+                del progetto, dal sopralluogo alla consegna, coordinando tutte le maestranze e rispettando tempi e
+                budget concordati.
+            </p>
+
+        </div>
+    </div>
+</section>

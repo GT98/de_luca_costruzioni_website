@@ -19,7 +19,6 @@ interface Review {
   imports: [CommonModule],
   templateUrl: './google-reviews.html',
   styleUrls: ['./google-reviews.scss'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   encapsulation: ViewEncapsulation.None
 })
 export class GoogleReviews implements OnInit {
@@ -88,18 +87,13 @@ export class GoogleReviews implements OnInit {
 
   initSwiper(): void {
     this.swiper = new Swiper('.reviews-swiper', {
-      modules: [Pagination, Autoplay],
+      modules: [Autoplay],
       slidesPerView: 1.2,
       spaceBetween: 30,
       loop: false,
       autoplay: {
         delay: 6000,
         disableOnInteraction: false,
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-        dynamicBullets: false,
       },
       breakpoints: {
         768: {

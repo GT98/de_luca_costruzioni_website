@@ -12,7 +12,7 @@
       <div class="cta">
         <app-button [routerLink]="'/free_estimate'" [kind]="'primary'" [text]="'Preventivo gratuito'"></app-button>
       </div>
-      <div #el (click)="toggleMenu(el)" class="mobile-only ml-1">
+      <div #el (click)="toggleMenu()" class="mobile-only ml-1">
         <div class="bar1"></div>
         <div class="bar2"></div>
         <div class="bar3"></div>
@@ -21,13 +21,96 @@
   </div>
 </div>
 @if(isMenuOpened()){
-<div class="menu-mobile animation">
-  <ul>
-    <li><a [routerLink]="'/homepage'">Home</a></li>
-    <li><a [routerLink]="'/agency'">Azienda</a></li>
-    <li><a [routerLink]="'/services'">Servizi</a></li>
-    <li><a [routerLink]="'/portfolio'">Portfolio</a></li>
-    <li><a [routerLink]="'/contact'">Contatti</a></li>
-  </ul>
+<div class="mobile-menu-overlay" [class.open]="isMenuOpened()" (click)="onClose()">
+  <div class="mobile-menu-content" [class.open]="isMenuOpened()" (click)="$event.stopPropagation()">
+
+    <!-- Header con Logo e Close Button -->
+    <div class="menu-header">
+      <img [src]="logoUrl" alt="Logo" class="menu-logo">
+      <button class="close-button" (click)="onClose()" aria-label="Chiudi menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="menu-nav">
+      <ul class="menu-list">
+        @for (item of menuItems; track item.label) {
+        <li class="menu-item">
+          <a [href]="item.link" class="menu-link" (click)="toggleMenu(item.link)">
+            {{ item.label }}
+          </a>
+        </li>
+        }
+      </ul>
+      <app-button [kind]="'primary'" [showIcon]="true" [text]="'Preventivo gratuito'"></app-button>
+    </nav>
+
+
+    <!-- Company Info -->
+    <div class="menu-footer">
+      <h3 class="company-name">{{ companyInfo.name }}</h3>
+      <p class="company-address">
+        {{ companyInfo.address }}<br>
+        {{ companyInfo.city }}
+      </p>
+
+      <div class="contact-info">
+        <div class="contact-item">
+          <span class="contact-label">Chiamaci:</span>
+          <a [href]="'tel:' + companyInfo.phone1" class="contact-link">
+            {{ companyInfo.phone1 }}
+          </a>
+        </div>
+
+        <div class="contact-item">
+          <span class="contact-label">Scrivici:</span>
+          <a [href]="'mailto:' + companyInfo.email" class="contact-link">
+            {{ companyInfo.email }}
+          </a>
+        </div>
+      </div>
+
+      <!-- Social Links -->
+      <div class="social-links">
+        @for (social of socialLinks; track social.name) {
+        <a [href]="social.url" class="social-link" target="_blank" rel="noopener noreferrer"
+          [attr.aria-label]="social.name">
+
+          @if (social.icon === 'instagram') {
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+          </svg>
+          }
+
+          @if (social.icon === 'facebook') {
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
+          }
+
+          @if (social.icon === 'linkedin') {
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+          </svg>
+          }
+
+          @if (social.icon === 'tiktok') {
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+          </svg>
+          }
+        </a>
+        }
+      </div>
+    </div>
+  </div>
 </div>
 }
