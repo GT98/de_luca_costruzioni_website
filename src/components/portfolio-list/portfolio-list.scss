@@ -30,7 +30,7 @@
 .section-label {
   font-size: 1rem;
   font-weight: 600;
-  color: #1F1F1F;
+  color: #1f1f1f;
   letter-spacing: 2px;
   margin-bottom: 10px;
   font-family: Outfit;
@@ -194,9 +194,10 @@
 // ============================================
 .project-location {
   padding: 22px 12px;
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #1a1a1a;
+  font-family: Bebas Neue;
+  font-size: 21.11px;
+  font-weight: 400;
+  color: #1f1f1f;
   text-transform: uppercase;
   letter-spacing: 1px;
   text-align: left;
@@ -204,7 +205,7 @@
 
   @media (max-width: 768px) {
     padding: 16px;
-    font-size: 1rem;
+    font-size: 21.11px;
   }
 }
 

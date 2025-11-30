@@ -1,2 +1,39 @@
 <app-hero-banner [title]="'Portfolio'"></app-hero-banner>
+
+<section class="portfolio-list-section">
+  
+  <div class="filters-and-content-wrapper">
+
+    <div class="filters-container">
+      @for (category of categories; track category) {
+        <button 
+          class="filter-button" 
+          [class.active]="selectedCategory === category" 
+          (click)="filterProjects(category)">
+          {{ category }}
+        </button>
+      }
+    </div>
+
+    <div class="projects-grid">
+      @for (project of filteredProjects; track project.id) {
+        <div class="project-card">
+          <div class="project-image-wrapper">
+            <img [src]="project.cover_img" [alt]="project.title">
+          </div>
+          
+          <div class="project-categories">
+            @for (cat of project.categories; track cat) {
+              <span class="category-tag">{{ cat }}</span>
+            }
+          </div>
+          
+          <h3 class="project-title">{{ project.title }}</h3>
+          <div class="project-description">{{ project.description }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
 <app-follow-on></app-follow-on>

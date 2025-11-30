@@ -1,10 +1,10 @@
 $text-color-dark: #333;
 $text-color-light: #666;
-$border-color: #1F1F1F;
+$border-color:  #1f1f1f;
 $primary-color: #007bff;
 
-.user-form-section {
-  background-color: var(--user-form-bg-color, white); /* Usa una variabile CSS con fallback a 'white' */
+.free-estimate-form-section {
+  background-color: white;
   padding: 80px 20px;
   font-family: 'Outfit', sans-serif;
   display: flex;
@@ -30,7 +30,7 @@ $primary-color: #007bff;
     margin: 0 0 20px 0;
     letter-spacing: 1px;
   }
-  
+
   p {
     font-size: 0.95em;
     color: $text-color-light;
@@ -39,16 +39,16 @@ $primary-color: #007bff;
 }
 
 /* --- Modulo --- */
-.user-form {
+.free-estimate-form {
   display: flex;
   flex-direction: column;
   gap: 15px; /* Spazio tra gli input */
 }
 
 /* Stile comune per tutti gli input testuali e textarea */
-input[type="text"], 
-input[type="tel"], 
-input[type="email"], 
+input[type='text'],
+input[type='tel'],
+input[type='email'],
 textarea,
 .file-placeholder {
   padding: 12px;
@@ -59,7 +59,7 @@ textarea,
   width: 100%;
   box-sizing: border-box; /* Include padding e border nella larghezza */
   transition: border-color 0.2s ease;
-  
+
   &:focus {
     border-color: $primary-color;
     outline: none;
@@ -94,17 +94,17 @@ textarea {
   align-items: flex-start;
   gap: 10px;
   margin: 15px 0;
-  
-  input[type="checkbox"] {
+
+  input[type='checkbox'] {
     margin-top: 4px;
     flex-shrink: 0; /* Impedisce che la checkbox si riduca */
   }
-  
+
   label {
     font-size: 0.85em;
     color: $text-color-light;
     line-height: 1.4;
-    
+
     strong {
       font-weight: 600;
     }
@@ -124,7 +124,7 @@ textarea {
   font-size: 1em;
   font-weight: 500;
   align-self: flex-start; /* Allinea il bottone a sinistra */
-  
+
   &:hover {
     background-color: $text-color-dark;
     color: white;
