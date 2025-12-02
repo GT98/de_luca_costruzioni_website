@@ -184,6 +184,14 @@
   color: rgba(255, 255, 255, 0.95);
   margin: 0;
 
+  /* Troncamento a 3 righe con ellissi */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   @media (max-width: 768px) {
     font-size: 0.95rem;
   }

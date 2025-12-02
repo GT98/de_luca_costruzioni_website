@@ -1,2 +1,69 @@
-<app-hero-banner [title]="'Portfolio'"></app-hero-banner>
+<app-hero-banner [title]="project.title" [isPortfolioDetail]="true" [imageUrl]="project.cover_img"
+    [bannerMode]="'full'">
+</app-hero-banner>
+
+<main class="portfolio-detail-main">
+    @if(loading) {
+    <div>Caricamento...</div>
+    }
+
+    @if(project) {
+    <section>
+        <h1 class="detail-title">{{ project.title }}</h1>
+        <div class="detail-description">{{ project.description }}</div>
+        
+        <!-- Gallery Swiper specifico per portfolio-detail -->
+        <div class="portfolio-detail-gallery">
+            <div class="swiper portfolio-detail-swiper">
+                <div class="swiper-wrapper">
+                    @for(img of project.immagini; track img.id) {
+                    <div class="swiper-slide portfolio-detail-slide">
+                        <div class="project-card">
+                            <div class="project-image-wrapper" (click)="openFullscreenByUrl(img.url)">
+                                <img [src]="img.url" [alt]="project.title" class="project-image" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+                <div class="portfolio-detail-pagination swiper-pagination"></div>
+            </div>
+        </div>
+        <!-- Fullscreen overlay (always in DOM, visibility controlled by .open) -->
+        <div class="portfolio-fullscreen-overlay" [class.open]="fullscreenOpen" (click)="onOverlayClick($event)">
+            <button class="pf-close" (click)="closeFullscreen()">×</button>
+
+            <div class="swiper portfolio-fullscreen-swiper">
+                <div class="swiper-wrapper">
+                    @for(img of project.immagini; track img.id) {
+                    <div class="swiper-slide">
+                        <div class="fs-image-wrapper">
+                            <img [src]="img.url" [alt]="project.title" loading="lazy">
+                        </div>
+                    </div>
+                    }
+                </div>
+                <div class="portfolio-fullscreen-pagination swiper-pagination"></div>
+            </div>
+
+            <div class="swiper portfolio-fullscreen-thumbs">
+                <div class="swiper-wrapper">
+                    @for(img of project.immagini; track img.id) {
+                    <div class="swiper-slide">
+                        <img [src]="img.url" [alt]="project.title" loading="lazy">
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+    }
+
+    @if(!project && !loading) {
+    <section>
+        <p>Progetto non trovato.</p>
+    </section>
+    }
+</main>
+
 <app-follow-on></app-follow-on>

@@ -1,9 +1,12 @@
-<section class="hero_banner" [class]="bannerMode()">
+<section class="hero_banner" [class]="bannerMode()" [style.background-image]="'url(' + imageUrl() + ')'">
     <div class="hero_content">
         <h1>{{title() | titlecase}}</h1>
         <div class="breadcrumb">
-            <a href="#">Home</a> /
-            <a href="#" class="active">{{title() | titlecase}}</a>
+            <a [routerLink]="'/homepage'">Home</a> /
+            @if(isPortfolioDetail()){
+            <a [routerLink]="'/portfolio'">Portfolio</a> /
+            }
+            <a class="active">{{title() | titlecase}}</a>
         </div>
     </div>
 

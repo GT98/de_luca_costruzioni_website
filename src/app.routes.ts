@@ -3,9 +3,9 @@ import Agency from './pages/agency/agency';
 import Home from './pages/home/home';
 import Services from './pages/services/services';
 import Portfolio from './pages/portfolio/portfolio';
+import PortfolioDetail from './pages/portfolio-detail/portfolio-detail';
 import Contact from './pages/contact/contact';
 import { FreeEstimate } from './pages/free-estimate/free-estimate';
-import { PortfolioDetail } from './pages/portfolio-detail/portfolio-detail';
 
 export const routes: Routes = [
     { path: '', component: Home }, // Default route

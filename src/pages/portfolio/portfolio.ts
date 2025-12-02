@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HeroBanner } from "../../components/hero-banner/hero-banner";
 import { FollowOn } from "../../components/follow-on/follow-on";
 import { Supabase } from '../../services/supabase';
+import { Router } from '@angular/router';
 
 interface Project {
   id: number;
@@ -20,6 +21,7 @@ interface Project {
 })
 export default class Portfolio {
   
+  route = inject(Router);
   projects: any[] = [];
 
   categories: string[] = ['SOGGIORNO', 'RINNOVO', 'MARMO VERO', 'CUCINA', 'ISOLAMENTO TERMICO', 'BAGNO'];
@@ -72,6 +74,11 @@ export default class Portfolio {
       return this.projects;
     }
     return this.projects;
+  }
+
+  goToDetail(project: any): void {
+    // Passa l'intero oggetto progetto nello state della navigazione
+    this.route.navigate(['portfolio', project.id], { state: { project } });
   }
 
 }

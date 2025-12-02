@@ -19,9 +19,10 @@ export class Map implements AfterViewInit {
   constructor() { }
 
   ngAfterViewInit(): void {
-    this.initMap();
+    //this.initMap();
   }
 
+  //todo capire se lasciare google maps o leaflet
   private initMap(): void {
     this.map = L.map('map', {
       center: [ this.lat, this.lon ],

@@ -140,6 +140,12 @@ $gray-bg: #f5f5f5;
   font-style: Light;
   font-size: 16.58px;
   line-height: 19.97px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  -webkit-line-clamp: 3; /* Limita a 3 righe */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* --- Responsive per Mobile --- */
@@ -163,5 +169,12 @@ $gray-bg: #f5f5f5;
 
   .project-description {
     font-size: 16.58px;
+    /* mantenere il clamp anche su mobile */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

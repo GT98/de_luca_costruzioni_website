@@ -16,7 +16,7 @@
   z-index: 1; /* Assicura che sia sotto l'header (z-index: 10) */
 
   &.full {
-    height: 700px;
+    height: 100vh;
   }
   &.medium {
     height: 350px;
@@ -40,6 +40,8 @@
 .hero_content {
   position: relative; /* Lo porta sopra l'overlay */
   z-index: 3;
+  // Padding per distanziare il testo dai bordi */
+  padding: 0 60px;
 }
 
 h1 {
