@@ -1,19 +1,21 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, OnDestroy } from '@angular/core';
 import { HeroBanner } from "../../components/hero-banner/hero-banner";
 import { FollowOn } from "../../components/follow-on/follow-on";
 import { Router, ActivatedRoute } from '@angular/router';
 import { Supabase } from '../../services/supabase';
 import Swiper from 'swiper';
 import { Pagination, Navigation, Thumbs } from 'swiper/modules';
+import { Subscription } from 'rxjs';
+import { PortfolioList } from "../../components/portfolio-list/portfolio-list";
 
 @Component({
   selector: 'app-portfolio-detail',
   standalone: true,
-  imports: [HeroBanner, FollowOn],
+  imports: [HeroBanner, FollowOn, PortfolioList],
   templateUrl: './portfolio-detail.html',
   styleUrl: './portfolio-detail.scss',
 })
-export default class PortfolioDetail implements OnInit {
+export default class PortfolioDetail implements OnInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private supabase = inject(Supabase);
@@ -35,54 +37,61 @@ export default class PortfolioDetail implements OnInit {
     }
   };
 
-  project: any | null = null;
-  loading = false;
+  project = signal<any | null>(null);
+  loading = signal(false);
+  private _routeSub?: Subscription;
 
   async ngOnInit(): Promise<void> {
-    // Prova a leggere lo state passato via router.navigate
-    const nav = (this.router as any).getCurrentNavigation?.();
-    this.project = nav?.extras?.state?.project ?? (history.state && history.state.project) ?? null;
-
-    // Se non arriva lo state (es. refresh o accesso diretto), fai fallback con fetch da Supabase
-    if (!this.project) {
-      const id = this.route.snapshot.paramMap.get('id');
-      if (!id) return;
-
-      this.loading = true;
-      const { data, error } = await this.supabase
-        .from('ristrutturazioni')
-        .select(`id, title, description, createdAt, immagini ( id, url, percorso_storage, created_at )`)
-        .eq('id', id)
-        .single();
-
-      this.loading = false;
-      if (error) {
-        console.error('Errore nel recupero dettaglio:', error);
-        return;
+    // Subscribe to route param changes so the same component instance
+    // refreshes when navigating between projects without a full reload.
+    this._routeSub = this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.loadProjectById(id);
       }
-
-      // Converti percorso_storage in URL pubblico se necessario
-      const client = this.supabase.getClient();
-      const immagini = (data.immagini ?? []).map((img: any) => {
-        if (img.url) return img;
-        if (img.percorso_storage) {
-          const publicUrl = client.storage.from('ristrutturazioni').getPublicUrl(img.percorso_storage).data.publicUrl;
-          return { ...img, url: publicUrl };
-        }
-        return img;
-      });
-
-      this.project = { ...data, immagini };
-    }
-
-    setTimeout(() => {
-      this.initSwiper();
-      // inizializza swiper fullscreen (thumbs) quando il progetto è pronto
-      this.initFullscreenSwipers();
-    }, 100);
+    });
 
     // aggiungi listener per ESC
     window.addEventListener('keydown', this._onKeyDown);
+  }
+
+  private async loadProjectById(id: string): Promise<void> {
+    this.loading.set(true);
+    const { data, error } = await this.supabase
+      .from('ristrutturazioni')
+      .select(`
+        id,
+        title,
+        description,
+        createdAt,
+        immagini (
+          id,
+          url,
+          ristrutturazione_id,
+          created_at
+        )
+      `).eq('id', id).single();
+
+    this.loading.set(false);
+    if (error) {
+      console.error('Errore nel recupero dettaglio:', error);
+      return;
+    }
+
+    this.project.set(data);
+
+    // ensure swipers are re-initialized for the new content
+    setTimeout(() => {
+      // destroy previous instances to avoid duplicates
+      try { this.swiper?.destroy(); } catch {}
+      try { this.thumbsSwiper?.destroy(); } catch {}
+      try { this.fullscreenSwiper?.destroy(); } catch {}
+
+      this.initSwiper();
+      this.initFullscreenSwipers();
+      // preload images for immediate display
+      this.preloadImages();
+    }, 100);
   }
 
   initSwiper(): void {
@@ -113,10 +122,10 @@ export default class PortfolioDetail implements OnInit {
     // distruggi se già inizializzati
     try {
       this.thumbsSwiper?.destroy();
-    } catch {}
+    } catch { }
     try {
       this.fullscreenSwiper?.destroy();
-    } catch {}
+    } catch { }
 
     // inizializza thumbs first
     this.thumbsSwiper = new Swiper('.portfolio-fullscreen-thumbs', {
@@ -153,8 +162,8 @@ export default class PortfolioDetail implements OnInit {
   }
 
   openFullscreenByUrl(url: string): void {
-    if (!this.project?.immagini) return;
-    const idx = (this.project.immagini as any[]).findIndex(i => i.url === url);
+    if (!this.project()?.immagini) return;
+    const idx = (this.project()?.immagini as any[]).findIndex(i => i.url === url);
     this.fullscreenOpen = true;
     // blocca lo scroll del body e mantiene la posizione corrente
     try {
@@ -228,6 +237,7 @@ export default class PortfolioDetail implements OnInit {
       this.thumbsSwiper.destroy();
     }
     window.removeEventListener('keydown', this._onKeyDown);
+    this._routeSub?.unsubscribe();
     // ripristina body se qualcosa è rimasto
     try {
       document.body.style.overflow = this._prevBodyOverflow ?? '';
@@ -238,6 +248,28 @@ export default class PortfolioDetail implements OnInit {
       if (this._navbarEl) {
         this._navbarEl.style.display = this._prevNavbarDisplay ?? '';
       }
-    } catch (e) {}
+    } catch (e) { }
+  }
+
+  /** Preload immagini per migliorare percezione di caricamento */
+  preloadImages(): void {
+    try {
+      const imgs = (this.project()?.immagini ?? []) as Array<any>;
+      const limit = Math.min(20, imgs.length);
+      for (let i = 0; i < limit; i++) {
+        const url = imgs[i]?.url;
+        if (url) {
+          const img = new Image();
+          img.src = url;
+        }
+      }
+      const cover = this.project()?.cover_img;
+      if (cover) {
+        const c = new Image();
+        c.src = cover;
+      }
+    } catch (e) {
+      // ignore
+    }
   }
 }

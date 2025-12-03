@@ -101,19 +101,6 @@
   background-color: #fff;
   width: 100%;
   height: 100%;
-
-  &:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    transform: translateY(-5px);
-
-    .project-image {
-      transform: scale(1.05);
-    }
-
-    .project-overlay {
-      opacity: 1;
-    }
-  }
 }
 
 .project-image-wrapper {

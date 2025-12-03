@@ -57,6 +57,22 @@
     }
   }
 
+  /* Mobile fino a 440px: riduci padding e margin per icona */
+  @media (max-width: 439px) {
+    padding: 10px 0.25rem 10px 1rem;
+    
+    .arrow-icon {
+      margin-left: 0.8rem;
+      width: 1.875rem;
+      height: 1.875rem;
+      
+      svg {
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+
   /* Effetto hover sul bottone */
   &:hover {
     background-color: #0056b3; /* Un blu più scuro all'hover */

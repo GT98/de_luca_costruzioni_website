@@ -1,26 +1,26 @@
-<app-hero-banner [title]="project.title" [isPortfolioDetail]="true" [imageUrl]="project.cover_img"
+<app-hero-banner [title]="project()?.title" [isPortfolioDetail]="true" [imageUrl]="project()?.immagini[0]?.url"
     [bannerMode]="'full'">
 </app-hero-banner>
 
 <main class="portfolio-detail-main">
-    @if(loading) {
+    @if(loading()) {
     <div>Caricamento...</div>
     }
 
-    @if(project) {
+    @if(project()) {
     <section>
-        <h1 class="detail-title">{{ project.title }}</h1>
-        <div class="detail-description">{{ project.description }}</div>
+        <h1 class="detail-title">{{ project().title }}</h1>
+        <div class="detail-description">{{ project().description }}</div>
         
         <!-- Gallery Swiper specifico per portfolio-detail -->
         <div class="portfolio-detail-gallery">
             <div class="swiper portfolio-detail-swiper">
                 <div class="swiper-wrapper">
-                    @for(img of project.immagini; track img.id) {
+                    @for(img of project().immagini; track img.id) {
                     <div class="swiper-slide portfolio-detail-slide">
                         <div class="project-card">
                             <div class="project-image-wrapper" (click)="openFullscreenByUrl(img.url)">
-                                <img [src]="img.url" [alt]="project.title" class="project-image" loading="lazy">
+                                <img [src]="img.url" [alt]="project().title" class="project-image" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -35,10 +35,10 @@
 
             <div class="swiper portfolio-fullscreen-swiper">
                 <div class="swiper-wrapper">
-                    @for(img of project.immagini; track img.id) {
+                    @for(img of project().immagini; track img.id) {
                     <div class="swiper-slide">
                         <div class="fs-image-wrapper">
-                            <img [src]="img.url" [alt]="project.title" loading="lazy">
+                            <img [src]="img.url" [alt]="project().title" loading="lazy">
                         </div>
                     </div>
                     }
@@ -48,9 +48,9 @@
 
             <div class="swiper portfolio-fullscreen-thumbs">
                 <div class="swiper-wrapper">
-                    @for(img of project.immagini; track img.id) {
+                    @for(img of project().immagini; track img.id) {
                     <div class="swiper-slide">
-                        <img [src]="img.url" [alt]="project.title" loading="lazy">
+                        <img [src]="img.url" [alt]="project().title" loading="lazy">
                     </div>
                     }
                 </div>
@@ -59,11 +59,11 @@
     </section>
     }
 
-    @if(!project && !loading) {
+    @if(!project() && !loading()) {
     <section>
         <p>Progetto non trovato.</p>
     </section>
     }
 </main>
-
+<app-portfolio-list [showSectionLabel]="false"></app-portfolio-list>
 <app-follow-on></app-follow-on>
