@@ -1,0 +1,32 @@
+.free-estimate-container {
+  padding: 0 37px 47px 37px;
+  .text-container {
+    .title {
+      color: #19669f;
+      font-family: 'Outfit';
+      font-weight: 700;
+      font-style: Bold;
+      font-size: 18.12px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      margin-bottom: 18px;
+    }
+    .title-section > h2 {
+      font-weight: 400;
+      color: #1f1f1f;
+      font-size: 50px;
+      line-height: 97%;
+      letter-spacing: 0%;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .content {
+      font-family: Outfit;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 20px;
+      margin-bottom: 35px;
+      color: #0A0200;
+    }
+  }
+}

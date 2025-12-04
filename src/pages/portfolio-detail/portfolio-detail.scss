@@ -51,6 +51,7 @@
 	/* Stili Swiper specifici per portfolio-detail - mobile */
 	.portfolio-detail-gallery {
 		margin-top: 18px;
+        margin-bottom: 18px;
 	}
 
 	.portfolio-detail-swiper {
@@ -219,4 +220,106 @@
 	display: none;
 }
 
+/* Stili per navigazione tra progetti */
+.portfolio-detail-navigation {
+	padding: 40px 0;
+	border-top: 1px solid #e5e5e5;
+	margin-top: 40px;
+
+	.nav-container {
+		display: flex;
+		gap: 12px;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.nav-button {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 12px 24px;
+		border: 2px solid #19669f;
+		background: white;
+		color: #19669f;
+		font-family: 'Outfit', sans-serif;
+		font-size: 16px;
+		font-weight: 600;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: all 0.3s ease;
+
+		.nav-icon {
+			font-size: 18px;
+		}
+
+		.nav-label {
+			text-transform: uppercase;
+		}
+
+		&:hover:not(:disabled) {
+			background: #19669f;
+			color: white;
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(25, 102, 159, 0.3);
+		}
+
+		&:disabled {
+			opacity: 0.4;
+			cursor: not-allowed;
+			border-color: #ccc;
+			color: #ccc;
+		}
+	}
+
+	.nav-home {
+		background: #19669f;
+		color: white;
+		border-color: #19669f;
+
+		&:hover {
+			background: #0d4270;
+			border-color: #0d4270;
+			box-shadow: 0 6px 16px rgba(25, 102, 159, 0.4);
+		}
+	}
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.portfolio-detail-navigation {
+		padding: 30px 0;
+		margin-top: 30px;
+
+		.nav-button {
+			padding: 10px 16px;
+			font-size: 14px;
+
+			.nav-icon {
+				font-size: 16px;
+			}
+		}
+	}
+}
+
+@media (max-width: 440px) {
+	.portfolio-detail-navigation {
+		.nav-container {
+			gap: 8px;
+		}
+
+		.nav-button {
+			padding: 10px 12px;
+			font-size: 12px;
+
+			.nav-label {
+				display: none;
+			}
+
+			.nav-icon {
+				font-size: 16px;
+			}
+		}
+	}
+}
 

@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './form-free-estimate.html',
   styleUrl: './form-free-estimate.scss',
 })
-export class FormSupplier {
+export class FormFreeEstimate {
 
 }

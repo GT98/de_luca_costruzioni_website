@@ -115,3 +115,67 @@ $icon-color: #f0f0f0; /* Colore bianco/chiaro per icone */
   display: flex;
   align-items: center;
 }
+
+
+
+//free-estimate.scss
+
+.banner_container {
+  height: 250px;
+  width: 100%;
+  background: #1f1f1f;
+  padding: 55px 120px 55px 50px;
+  color: white;
+
+  .banner_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+    h2 {
+      font-family: Bebas Neue;
+      font-weight: 400;
+      font-style: Regular;
+      font-size: 70px;
+      line-height: 97%;
+      letter-spacing: 0%;
+      text-transform: uppercase;
+    }
+    p {
+      font-family: Outfit;
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 26px;
+      letter-spacing: 0%;
+    }
+
+    .banner_text {
+      flex-basis: 70%;
+    }
+    .banner_cta {
+      flex-basis: 30%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .banner_container {
+    height: auto;
+    padding: 30px 30px 60px 30px;
+
+    .banner_content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+
+      .banner_text,
+      .banner_cta {
+        flex-basis: auto;
+      }
+
+      h2 {
+        font-size: 40px;
+      }
+    }
+  }
+}

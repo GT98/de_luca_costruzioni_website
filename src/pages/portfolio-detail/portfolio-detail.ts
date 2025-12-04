@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject, signal, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { HeroBanner } from "../../components/hero-banner/hero-banner";
 import { FollowOn } from "../../components/follow-on/follow-on";
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,12 +6,11 @@ import { Supabase } from '../../services/supabase';
 import Swiper from 'swiper';
 import { Pagination, Navigation, Thumbs } from 'swiper/modules';
 import { Subscription } from 'rxjs';
-import { PortfolioList } from "../../components/portfolio-list/portfolio-list";
 
 @Component({
   selector: 'app-portfolio-detail',
   standalone: true,
-  imports: [HeroBanner, FollowOn, PortfolioList],
+  imports: [HeroBanner, FollowOn],
   templateUrl: './portfolio-detail.html',
   styleUrl: './portfolio-detail.scss',
 })
@@ -19,6 +18,7 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private supabase = inject(Supabase);
+  private cdr = inject(ChangeDetectorRef);
   private swiper?: Swiper;
   private fullscreenSwiper?: Swiper;
   private thumbsSwiper?: Swiper;
@@ -40,8 +40,59 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
   project = signal<any | null>(null);
   loading = signal(false);
   private _routeSub?: Subscription;
+  private _fullscreenCategory = signal<'beforeImages' | 'afterImages' | null>(null);
+  private allProjects: any[] = [];
+  private currentProjectIndex = -1;
+  private projectsCache: Map<number, any> = new Map();
+
+  // Getter per le immagini della categoria attuale in fullscreen
+  get fullscreenImages(): any[] {
+    const immagini = this.project()?.immagini;
+    const category = this._fullscreenCategory();
+    if (!immagini || !category) return [];
+    return immagini[category] ?? [];
+  }
+
+  get previousProject(): any | null {
+    const currentId = this.project()?.id;
+    if (!currentId || !this.allProjects.length) return null;
+    
+    // Usa findIndex ma con l'assumption che la lista non sia troppo grande
+    // oppure potrebbe essere ottimizzato ulteriormente con indici persistenti
+    const currentIdx = this.allProjects.findIndex((p: any) => p.id === currentId);
+    if (currentIdx > 0) {
+      return this.allProjects[currentIdx - 1];
+    }
+    return null;
+  }
+
+  get nextProject(): any | null {
+    const currentId = this.project()?.id;
+    if (!currentId || !this.allProjects.length) return null;
+    
+    const currentIdx = this.allProjects.findIndex((p: any) => p.id === currentId);
+    if (currentIdx >= 0 && currentIdx < this.allProjects.length - 1) {
+      return this.allProjects[currentIdx + 1];
+    }
+    return null;
+  }
+
+  navigateToProject(projectId: number): void {
+    this.router.navigate(['portfolio', projectId]);
+  }
+
+  goToPortfolio(): void {
+    this.router.navigate(['portfolio']);
+  }
 
   async ngOnInit(): Promise<void> {
+    // Svuota il cache sessionStorage all'ingresso della pagina
+    // così ogni reload (F5) ricarica i dati freschi da Supabase
+    sessionStorage.removeItem('portfolio_projects_list');
+
+    // Carica lista di tutti i progetti per navigazione
+    await this.loadAllProjects();
+
     // Subscribe to route param changes so the same component instance
     // refreshes when navigating between projects without a full reload.
     this._routeSub = this.route.paramMap.subscribe(params => {
@@ -55,8 +106,56 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
     window.addEventListener('keydown', this._onKeyDown);
   }
 
+  private async loadAllProjects(): Promise<void> {
+    try {
+      // Prova a recuperare la lista da sessionStorage (cache per la sessione)
+      const cached = sessionStorage.getItem('portfolio_projects_list');
+      if (cached) {
+        try {
+          const data = JSON.parse(cached);
+          this.allProjects = data;
+          // Ricostruisci la mappa di cache
+          this.projectsCache.clear();
+          data.forEach((p: any) => {
+            this.projectsCache.set(p.id, p);
+          });
+          return;
+        } catch (e) {
+          // Se il parsing fallisce, continua a caricare da Supabase
+        }
+      }
+
+      // Se non in cache, carica da Supabase
+      const { data, error } = await this.supabase
+        .from('ristrutturazioni')
+        .select('id, title, description, createdAt')
+        .order('createdAt', { ascending: false });
+
+      if (!error && data) {
+        this.allProjects = data;
+        // Popola mappa per ricerche veloci
+        this.projectsCache.clear();
+        data.forEach((p: any) => {
+          this.projectsCache.set(p.id, p);
+        });
+        // Cache nella sessione
+        try {
+          sessionStorage.setItem('portfolio_projects_list', JSON.stringify(data));
+        } catch (e) {
+          // Ignora errori di storage (es. quota exceeded)
+        }
+      }
+    } catch (e) {
+      console.error('Errore nel caricamento lista progetti:', e);
+    }
+  }
+
   private async loadProjectById(id: string): Promise<void> {
     this.loading.set(true);
+    
+    // Traccia indice del progetto corrente
+    this.currentProjectIndex = this.allProjects.findIndex((p: any) => p.id === parseInt(id));
+
     const { data, error } = await this.supabase
       .from('ristrutturazioni')
       .select(`
@@ -68,7 +167,8 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
           id,
           url,
           ristrutturazione_id,
-          created_at
+          created_at,
+          stato
         )
       `).eq('id', id).single();
 
@@ -78,20 +178,34 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
       return;
     }
 
-    this.project.set(data);
+    this.project.set(this.organizeData(data));
 
     // ensure swipers are re-initialized for the new content
     setTimeout(() => {
       // destroy previous instances to avoid duplicates
-      try { this.swiper?.destroy(); } catch {}
-      try { this.thumbsSwiper?.destroy(); } catch {}
-      try { this.fullscreenSwiper?.destroy(); } catch {}
+      try { this.swiper?.destroy(); } catch { }
+      try { this.thumbsSwiper?.destroy(); } catch { }
+      try { this.fullscreenSwiper?.destroy(); } catch { }
 
       this.initSwiper();
       this.initFullscreenSwipers();
       // preload images for immediate display
       this.preloadImages();
     }, 100);
+  }
+
+  organizeData(data: any): any {
+    if (!data) return data;
+    const beforeImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'prima');
+    const afterImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'dopo');
+    return {
+      ...data,
+      immagini: {
+        beforeImages,
+        afterImages
+      },
+      cover_img: afterImages.length > 0 ? afterImages[0].url : (beforeImages.length > 0 ? beforeImages[0].url : null)
+    };
   }
 
   initSwiper(): void {
@@ -162,9 +276,30 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
   }
 
   openFullscreenByUrl(url: string): void {
-    if (!this.project()?.immagini) return;
-    const idx = (this.project()?.immagini as any[]).findIndex(i => i.url === url);
+    const immagini = this.project()?.immagini;
+    if (!immagini) return;
+
+    // Determina in quale categoria si trova l'immagine
+    let category: 'beforeImages' | 'afterImages' | null = null;
+    let idx = -1;
+
+    const beforeIdx = (immagini.beforeImages ?? []).findIndex((i: any) => i.url === url);
+    if (beforeIdx >= 0) {
+      category = 'beforeImages';
+      idx = beforeIdx;
+    } else {
+      const afterIdx = (immagini.afterImages ?? []).findIndex((i: any) => i.url === url);
+      if (afterIdx >= 0) {
+        category = 'afterImages';
+        idx = afterIdx;
+      }
+    }
+
+    if (!category) return; // Immagine non trovata
+
+    this._fullscreenCategory.set(category);
     this.fullscreenOpen = true;
+    
     // blocca lo scroll del body e mantiene la posizione corrente
     try {
       this._prevBodyOverflow = document.body.style.overflow;
@@ -188,9 +323,17 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
 
     // attendi che il DOM mostri l'overlay e gli swiper siano pronti
     setTimeout(() => {
+      // Forza Angular a renderizzare il template con la nuova categoria
+      this.cdr.detectChanges();
+      
       if (!this.fullscreenSwiper || !this.thumbsSwiper) {
         this.initFullscreenSwipers();
       }
+      
+      // Aggiorna swiper per ricontare i nuovi slide (categoria cambiata)
+      this.thumbsSwiper?.update();
+      this.fullscreenSwiper?.update();
+      
       const targetIndex = idx >= 0 ? idx : 0;
       // slideTo usa indice dello slide (non loop), usiamo 0-based
       this.fullscreenSwiper?.slideTo(targetIndex, 0);
@@ -207,6 +350,7 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
 
   closeFullscreen(): void {
     this.fullscreenOpen = false;
+    this._fullscreenCategory.set(null);
     // ripristina lo scroll del body e la posizione salvata
     try {
       document.body.style.overflow = this._prevBodyOverflow ?? '';
@@ -227,15 +371,25 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.swiper) {
-      this.swiper.destroy();
-    }
-    if (this.fullscreenSwiper) {
-      this.fullscreenSwiper.destroy();
-    }
-    if (this.thumbsSwiper) {
-      this.thumbsSwiper.destroy();
-    }
+    try {
+      if (this.swiper && typeof (this.swiper as any).destroy === 'function') {
+        (this.swiper as any).destroy();
+      }
+    } catch (e) { }
+    try {
+      if (this.fullscreenSwiper && typeof (this.fullscreenSwiper as any).destroy === 'function') {
+        (this.fullscreenSwiper as any).destroy();
+      }
+    } catch (e) { }
+    try {
+      if (this.thumbsSwiper && typeof (this.thumbsSwiper as any).destroy === 'function') {
+        (this.thumbsSwiper as any).destroy();
+      }
+    } catch (e) { }
+    
+    // Cleanup cache
+    this.projectsCache.clear();
+    
     window.removeEventListener('keydown', this._onKeyDown);
     this._routeSub?.unsubscribe();
     // ripristina body se qualcosa è rimasto
@@ -254,15 +408,24 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
   /** Preload immagini per migliorare percezione di caricamento */
   preloadImages(): void {
     try {
-      const imgs = (this.project()?.immagini ?? []) as Array<any>;
-      const limit = Math.min(20, imgs.length);
+      // Precarica immagini da entrambe le categorie
+      const immagini = this.project()?.immagini;
+      if (!immagini) return;
+
+      const allImages = [
+        ...(immagini.beforeImages ?? []),
+        ...(immagini.afterImages ?? [])
+      ];
+      
+      const limit = Math.min(20, allImages.length);
       for (let i = 0; i < limit; i++) {
-        const url = imgs[i]?.url;
+        const url = allImages[i]?.url;
         if (url) {
           const img = new Image();
           img.src = url;
         }
       }
+      
       const cover = this.project()?.cover_img;
       if (cover) {
         const c = new Image();
