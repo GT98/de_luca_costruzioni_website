@@ -6,6 +6,13 @@ $primary-color: #007bff;
 .free-estimate-form-section {
   background-color: white;
   padding: 80px 20px;
+
+  //da desktop setto il padding a 130px
+
+  @media (min-width: 1024px) {
+    padding: 130px 86px;
+  }
+
   font-family: 'Outfit', sans-serif;
   display: flex;
   justify-content: center;
@@ -14,6 +21,11 @@ $primary-color: #007bff;
 /* --- Wrapper principale (Limita la larghezza del form e del testo) --- */
 .form-wrapper {
   max-width: 500px; /* Larghezza ideale per un modulo a colonna singola */
+
+  @media (min-width: 1024px) {
+    max-width: 100%; /* Larghezza aumentata per tablet e desktop */
+  }
+
   width: 100%;
 }
 
@@ -43,6 +55,14 @@ $primary-color: #007bff;
   display: flex;
   flex-direction: column;
   gap: 15px; /* Spazio tra gli input */
+
+  //per tablet dispongo il form a griglia
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 900px;
+  }
 }
 
 /* Stile comune per tutti gli input testuali e textarea */
@@ -69,6 +89,11 @@ textarea,
 textarea {
   min-height: 150px;
   resize: vertical;
+
+  @media (min-width: 1024px) {
+    grid-column: span 2; /* Occupa entrambe le colonne su tablet e desktop */
+  }
+
 }
 
 /* --- Gestione Input File --- */
@@ -94,6 +119,10 @@ textarea {
   align-items: flex-start;
   gap: 10px;
   margin: 15px 0;
+
+  @media (min-width: 1024px) {
+    grid-column: span 2; /* Occupa entrambe le colonne su tablet e desktop */
+  }
 
   input[type='checkbox'] {
     margin-top: 4px;

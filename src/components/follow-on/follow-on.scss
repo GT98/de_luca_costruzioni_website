@@ -3,6 +3,11 @@ $text-color: #0a0200;
 .social-section {
   display: flex;
   flex-direction: column;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
+
   align-items: center;
   background-color: #d9d9d966;
   padding-top: 66px;
@@ -41,11 +46,11 @@ $text-color: #0a0200;
     display: flex;
     justify-content: flex-end;
 
-    height: 340px;
+    height: 500px;
 
     /* Usa una media query per ridurre l'altezza su schermi più piccoli */
-    @media (max-width: 1200px) {
-      height: 500px; /* Esempio: Inizia a ridursi gradualmente */
+    @media (min-width: 1024px) {
+      height: auto; /* Esempio: Inizia a ridursi gradualmente */
     }
 
     img {
@@ -69,7 +74,7 @@ $text-color: #0a0200;
     &.instagram {
       position: absolute;
       bottom: 44px;
-      right: 77px;
+      left: 147px;
     }
 
     .tiktok-button,

@@ -20,7 +20,12 @@
   }
   &.medium {
     height: 350px;
-  }
+
+    //per desktop fisso l'altezza a 445px
+    @media (min-width: 1024px) {
+      height: 445px;
+    }
+  } 
 }
 
 /* --- Overlay (Gradiente Scuro) --- */

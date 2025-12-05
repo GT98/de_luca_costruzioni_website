@@ -1,5 +1,10 @@
 .free-estimate-container {
   padding: 0 37px 47px 37px;
+
+  @media (min-width: 1024px) {
+    padding: 0px 37px;
+  }
+
   .text-container {
     .title {
       color: #19669f;
@@ -14,7 +19,7 @@
     .title-section > h2 {
       font-weight: 400;
       color: #1f1f1f;
-      font-size: 50px;
+      font-size: 45px;
       line-height: 97%;
       letter-spacing: 0%;
       text-transform: uppercase;
@@ -25,7 +30,6 @@
       font-weight: 300;
       font-size: 14px;
       line-height: 20px;
-      margin-bottom: 35px;
       color: #0A0200;
     }
   }

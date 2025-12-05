@@ -26,11 +26,18 @@ export default class Navbar {
   viewportScroller = inject(ViewportScroller);
   isMenuOpened = signal(false);
   isScrolled = signal(false);
+  isMobile = signal(false);
 
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.isScrolled.set(window.scrollY > 50);
+    //se è mobile aggiungo la classe scrolled altrimenti no
+    if (window.innerWidth <= 768) {
+      this.isScrolled.set(window.scrollY > 50);
+      this.isMobile.set(true);
+    } else {
+      this.isMobile.set(false);
+    }
   }
 
   logoUrl = 'assets/images/logo_primary.svg';

@@ -7,7 +7,7 @@ $icon-color: #f0f0f0; /* Colore bianco/chiaro per icone */
   margin-top: 14rem;
   display: flex;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 49px 37px;
   font-family: 'Outfit', sans-serif;
   background-color: #1f1f1f; /* Per separare dal contesto precedente */
 }
@@ -33,9 +33,10 @@ $icon-color: #f0f0f0; /* Colore bianco/chiaro per icone */
 
 /* --- Blocco Contatti e Dettagli --- */
 .details-block {
-  margin-top: 17.71rem; /* Spazio per l'immagine sovrapposta */
+  margin-top: 19rem; /* Spazio per l'immagine sovrapposta */
   color: $light-text;
-  padding: 30px;
+  width: 100%;
+  height: 100%;
   text-align: left;
 }
 
@@ -116,27 +117,24 @@ $icon-color: #f0f0f0; /* Colore bianco/chiaro per icone */
   align-items: center;
 }
 
-
-
 //free-estimate.scss
 
 .banner_container {
-  height: 250px;
   width: 100%;
   background: #1f1f1f;
-  padding: 55px 120px 55px 50px;
   color: white;
 
   .banner_content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 300px;
+
+    @media (min-width:1024px) {
+      display: flex;
+    }
+
     h2 {
       font-family: Bebas Neue;
       font-weight: 400;
       font-style: Regular;
-      font-size: 70px;
+      font-size: 50px;
       line-height: 97%;
       letter-spacing: 0%;
       text-transform: uppercase;
@@ -151,6 +149,11 @@ $icon-color: #f0f0f0; /* Colore bianco/chiaro per icone */
 
     .banner_text {
       flex-basis: 70%;
+      margin-bottom: 20px;
+
+      h2 {
+        margin-bottom: 25px;
+      }
     }
     .banner_cta {
       flex-basis: 30%;
@@ -158,23 +161,91 @@ $icon-color: #f0f0f0; /* Colore bianco/chiaro per icone */
   }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 1024px) {
+  .contact-info-section {
+    padding: 0;
+    margin-top: 14rem;
+    //per desktop riduco il margin-top a 140px
+    @media (min-width: 1024px) {
+      margin-top: 140px;
+    }
+  }
+
+  /* --- Ristruttura il blocco Contenuto/Immagine --- */
+  .details-block {
+    display: flex; /* Attiva il layout orizzontale */
+    max-width: 1200px; /* Larghezza massima del tuo container */
+    width: 90%;
+    height: 100%;
+    padding: 0;
+    margin-top: 0; /* Rimuovi lo spazio di compensazione mobile */
+    height: 475px;
+  }
+
+  /* --- Ristruttura il Contenitore Immagine --- */
+  .image-container {
+    position: static; /* Rimuove l'immagine dalla posizione assoluta */
+    width: 50%; /* Occupa metà della larghezza */
+    height: 560px; /* Altezza fissa per allineamento */
+    margin-top: -3rem;
+    padding: 0;
+    order: 1; /* Posiziona l'immagine a sinistra (se il blocco contatti è order: 2) */
+    background-color: transparent;
+
+    img {
+      object-position: center right; /* Adatta il focus dell'immagine */
+    }
+  }
+
+  /* --- Blocco Contatti (Lato Destro) --- */
+  .contact-info-container {
+    background-color: $dark-bg;
+    width: 50%; /* Occupa l'altra metà */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra verticalmente il contenuto nel blocco scuro */
+    padding: 60px 80px;
+    order: 2; /* Posiziona il blocco a destra */
+  }
+
+  /* --- BLOCCO FREE ESTIMATE (Banner a Larghezza Piena) --- */
   .banner_container {
-    height: auto;
-    padding: 30px 30px 60px 30px;
+    position: static;
+    order: 2;
+    background: $dark-bg;
+    color: $light-text;
+    width: 50%; /* Occupa la metà destra */
+    height: 100%;
+    padding: 60px 80px;
+
+    @media (min-width: 1024px) {
+      padding: 30px 50px;
+    }
 
     .banner_content {
+      /* Override per il layout desktop del banner */
       flex-direction: column;
       align-items: flex-start;
-      gap: 20px;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      gap: 30px;
 
-      .banner_text,
-      .banner_cta {
+      .banner_text {
         flex-basis: auto;
+        max-width: 90%;
+        margin-bottom: 20px;
+        h2 {
+          font-size: 50px;
+        }
+        p {
+          @media (min-width: 1024px) {
+            font-size: 14px;
+          }
+        }
       }
-
-      h2 {
-        font-size: 40px;
+      .banner_button {
+        // Aggiungi qui lo stile per il tuo app-button se necessario
       }
     }
   }

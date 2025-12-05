@@ -1,11 +1,20 @@
 $text-color-dark: #333;
 $text-color-light: #666;
-$border-color: #1F1F1F;
+$border-color: #1f1f1f;
 $primary-color: #007bff;
 
 .user-form-section {
-  background-color: var(--user-form-bg-color, white); /* Usa una variabile CSS con fallback a 'white' */
+  background-color: var(
+    --user-form-bg-color,
+    white
+  ); /* Usa una variabile CSS con fallback a 'white' */
   padding: 80px 20px;
+  //da desktop setto il padding a 130px
+
+  @media (min-width: 1024px) {
+    padding: 130px 86px;
+  }
+
   font-family: 'Outfit', sans-serif;
   display: flex;
   justify-content: center;
@@ -14,6 +23,10 @@ $primary-color: #007bff;
 /* --- Wrapper principale (Limita la larghezza del form e del testo) --- */
 .form-wrapper {
   max-width: 500px; /* Larghezza ideale per un modulo a colonna singola */
+
+  @media (min-width: 1024px) {
+    max-width: 100%; /* Larghezza aumentata per tablet e desktop */
+  }
   width: 100%;
 }
 
@@ -30,7 +43,7 @@ $primary-color: #007bff;
     margin: 0 0 20px 0;
     letter-spacing: 1px;
   }
-  
+
   p {
     font-size: 0.95em;
     color: $text-color-light;
@@ -43,12 +56,20 @@ $primary-color: #007bff;
   display: flex;
   flex-direction: column;
   gap: 15px; /* Spazio tra gli input */
+
+  //per tablet dispongo il form a griglia
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 900px;
+  }
 }
 
 /* Stile comune per tutti gli input testuali e textarea */
-input[type="text"], 
-input[type="tel"], 
-input[type="email"], 
+input[type='text'],
+input[type='tel'],
+input[type='email'],
 textarea,
 .file-placeholder {
   padding: 12px;
@@ -59,7 +80,7 @@ textarea,
   width: 100%;
   box-sizing: border-box; /* Include padding e border nella larghezza */
   transition: border-color 0.2s ease;
-  
+
   &:focus {
     border-color: $primary-color;
     outline: none;
@@ -69,6 +90,10 @@ textarea,
 textarea {
   min-height: 150px;
   resize: vertical;
+
+  @media (min-width: 1024px) {
+    grid-column: span 2; /* Occupa entrambe le colonne su tablet e desktop */
+  }
 }
 
 /* --- Gestione Input File --- */
@@ -94,17 +119,21 @@ textarea {
   align-items: flex-start;
   gap: 10px;
   margin: 15px 0;
-  
-  input[type="checkbox"] {
+
+  @media (min-width: 1024px) {
+    grid-column: span 2; /* Occupa entrambe le colonne su tablet e desktop */
+  }
+
+  input[type='checkbox'] {
     margin-top: 4px;
     flex-shrink: 0; /* Impedisce che la checkbox si riduca */
   }
-  
+
   label {
     font-size: 0.85em;
     color: $text-color-light;
     line-height: 1.4;
-    
+
     strong {
       font-weight: 600;
     }
@@ -124,7 +153,7 @@ textarea {
   font-size: 1em;
   font-weight: 500;
   align-self: flex-start; /* Allinea il bottone a sinistra */
-  
+
   &:hover {
     background-color: $text-color-dark;
     color: white;

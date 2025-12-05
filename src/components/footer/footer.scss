@@ -1,13 +1,18 @@
-$dark-bg: #1F1F1F;
-$text-color: #FFFFFF;
-$light-blue: #0090FF;
-$divider-color: #FFFFFF66;
+$dark-bg: #1f1f1f;
+$text-color: #ffffff;
+$light-blue: #0090ff;
+$divider-color: #ffffff66;
 
 .app-footer {
   background-color: $dark-bg;
   color: $text-color;
   font-family: 'Outfit', sans-serif; /* Usa il tuo font Outfit */
   padding: 70px 70px 40px 70px; /* Top, Right, Bottom, Left padding */
+
+  @media (min-width: 1024px) {
+    padding: 70px 37px 50px 37px; /* Aumenta il padding su schermi più grandi */
+  }
+
   position: relative;
 }
 
@@ -23,7 +28,21 @@ $divider-color: #FFFFFF66;
   display: flex;
   justify-content: space-between; /* Distribuisce le colonne */
   flex-direction: column;
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    text-align: center; /* Dispone le colonne in fila su schermi più larghi */
+  }
+
+  @media (min-width: 1024px) {
+    flex-direction: row; /* Dispone le colonne in fila su schermi più larghi */
+  }
+
   flex-wrap: wrap;
+
+  @media (min-width: 1024px) {
+    flex-wrap: nowrap;
+  }
+
   gap: 30px; /* Spazio tra le colonne */
   max-width: 1440px; /* Limita la larghezza massima del contenuto */
   margin: 0 auto; /* Centra il contenuto */
@@ -47,6 +66,10 @@ $divider-color: #FFFFFF66;
 .footer-col-logo {
   flex-basis: 25%; /* Alloca un po' più di spazio per il logo */
   align-items: flex-start;
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    align-items: center; /* Dispone le colonne in fila su schermi più larghi */
+  }
 
   img {
     width: 270px; /* Larghezza del logo */
@@ -127,6 +150,10 @@ $divider-color: #FFFFFF66;
 .social-icons {
   display: flex;
   gap: 15px;
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    justify-content: center; /* Dispone le colonne in fila su schermi più larghi */
+  }
 
   .social-icon {
     display: flex;
