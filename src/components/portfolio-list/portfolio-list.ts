@@ -107,6 +107,10 @@ export class PortfolioList implements OnInit, OnDestroy {
           slidesPerView: 2,
           spaceBetween: 30,
         },
+        1440: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
       },
     });
   }

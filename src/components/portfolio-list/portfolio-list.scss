@@ -2,11 +2,12 @@
 @import 'swiper/css/pagination';
 
 .portfolio-section {
-  padding: 80px 17px;
+  padding: 80px 37px;
+
   background-color: #ffffff;
 
-  @media (max-width: 768px) {
-    padding: 60px 37px;
+  @media (min-width: 768px) {
+    padding: 60px 125px;
   }
 }
 

@@ -16,6 +16,12 @@ $text-color: #0a0200;
   .text-content {
     padding: 0px 37px;
     max-width: 450px;
+
+    @media (min-width: 1024px) {
+      max-width: 100%;
+      padding: 0 125px;
+    }
+    
     flex: 1;
     margin-bottom: 44px;
     .title {

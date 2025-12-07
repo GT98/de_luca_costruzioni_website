@@ -44,6 +44,7 @@ export default class Portfolio {
           id,
           url,
           ristrutturazione_id,
+          isCoverImg,
           created_at
         )
       `);
@@ -57,7 +58,7 @@ export default class Portfolio {
     this.projects = (data ?? []).map(ristrutturazione => ({
       ...ristrutturazione,
       immagini: (ristrutturazione.immagini ?? []),
-      cover_img : ristrutturazione.immagini[0]?.url
+      cover_img : ristrutturazione.immagini.find((img: any) => img.isCoverImg)?.url || null
     }));
   }
 

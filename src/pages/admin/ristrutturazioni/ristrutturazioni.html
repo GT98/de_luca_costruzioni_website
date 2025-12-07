@@ -1,0 +1,312 @@
+<div class="ristrutturazioni-container">
+    <div class="header">
+        <h1>Gestione Ristrutturazioni</h1>
+        <button class="btn-primary" (click)="openNewForm()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Nuova Ristrutturazione
+        </button>
+    </div>
+
+    <!-- Lista Ristrutturazioni -->
+    <div *ngIf="view === 'list'" class="list-view">
+        <div *ngIf="loading()" class="loading">Caricamento in corso...</div>
+
+        <div *ngIf="!loading() && ristrutturazioni()?.length === 0" class="empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg>
+            <h2>Nessuna ristrutturazione</h2>
+            <p>Inizia aggiungendo la tua prima ristrutturazione</p>
+        </div>
+
+        <div class="cards-grid">
+            <div *ngFor="let r of ristrutturazioni()" class="card">
+                <div class="card-header">
+                    <h3>{{ r.title }}</h3>
+                    <span class="badge" [ngClass]="'badge-' + r.stato">{{ getStatoLabel(r.stato) }}</span>
+                </div>
+                <div class="card-body">
+                    <p class="description">{{ r.descrizione }}</p>
+                    <div class="info-row">
+                        <span class="label">Indirizzo:</span>
+                        <span>{{ r.indirizzo }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Periodo:</span>
+                        <span>{{ r.data_inizio | date:'dd/MM/yyyy' }} - {{ r.data_fine | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Costo:</span>
+                        <span class="price">€ {{ r.costo | number:'1.2-2' }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Immagini:</span>
+                        <span>{{ r.immagini_prima?.length }} prima, {{ r.immagini_dopo?.length }} dopo</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-secondary" (click)="viewDetail(r)">Dettagli</button>
+                    <button class="btn-danger" (click)="deleteRistrutturazione(r)">Elimina</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dettaglio/Modifica -->
+    <div *ngIf="view === 'detail' && selectedRistrutturazione" class="detail-view">
+        <div class="detail-header">
+            <button class="btn-back" (click)="backToList()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Torna alla lista
+            </button>
+            <h2>Modifica Ristrutturazione</h2>
+        </div>
+
+        <form class="form" (ngSubmit)="updateRistrutturazione()">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Titolo *</label>
+                    <input type="text" [(ngModel)]="selectedRistrutturazione.title" name="titolo" required>
+                </div>
+                <div class="form-group">
+                    <label>Stato *</label>
+                    <select [(ngModel)]="selectedRistrutturazione.stato" name="stato" required>
+                        <option value="in_attesa">In Attesa</option>
+                        <option value="in_corso">In Corso</option>
+                        <option value="completata">Completata</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Descrizione *</label>
+                <textarea [(ngModel)]="selectedRistrutturazione.description" name="descrizione" rows="4"
+                    required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Indirizzo *</label>
+                <input type="text" [(ngModel)]="selectedRistrutturazione.indirizzo" name="indirizzo" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Data Inizio *</label>
+                    <input type="date" [(ngModel)]="selectedRistrutturazione.data_inizio" name="data_inizio" required>
+                </div>
+                <div class="form-group">
+                    <label>Data Fine *</label>
+                    <input type="date" [(ngModel)]="selectedRistrutturazione.data_fine" name="data_fine" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Costo (€) *</label>
+                <input type="number" [(ngModel)]="selectedRistrutturazione.costo" name="costo" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label>Immagini Prima</label>
+                <div class="image-upload">
+                    <input type="file" #filePrima multiple accept="image/*" (change)="onImageSelect($event, 'prima')"
+                        style="display: none">
+                    <button type="button" class="btn-upload" (click)="filePrima.click()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Carica Immagini Prima
+                    </button>
+                    <div class="image-gallery">
+                        <div *ngFor="let img of selectedRistrutturazione.immagini.beforeImages; let i = index"
+                            class="image-item">
+                            <img [src]="img.url" alt="Prima">
+                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'prima')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Immagini Dopo</label>
+                <div class="image-upload">
+                    <input type="file" #fileDopo multiple accept="image/*" (change)="onImageSelect($event, 'dopo')"
+                        style="display: none">
+                    <button type="button" class="btn-upload" (click)="fileDopo.click()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Carica Immagini Dopo
+                    </button>
+                    <div class="image-gallery">
+                        <div *ngFor="let img of selectedRistrutturazione.immagini.afterImages; let i = index"
+                            class="image-item">
+                            <img [src]="img.url" alt="Dopo">
+                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'dopo')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="backToList()">Annulla</button>
+                <button type="submit" class="btn-primary" [disabled]="saving">
+                    {{ saving ? 'Salvataggio...' : 'Salva Modifiche' }}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Form Nuovo -->
+    <div *ngIf="view === 'new'" class="detail-view">
+        <div class="detail-header">
+            <button class="btn-back" (click)="backToList()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Torna alla lista
+            </button>
+            <h2>Nuova Ristrutturazione</h2>
+        </div>
+
+        <form class="form" (ngSubmit)="createRistrutturazione()">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Titolo *</label>
+                    <input type="text" [(ngModel)]="newRistrutturazione.titolo" name="titolo" required>
+                </div>
+                <div class="form-group">
+                    <label>Stato *</label>
+                    <select [(ngModel)]="newRistrutturazione.stato" name="stato" required>
+                        <option value="in_attesa">In Attesa</option>
+                        <option value="in_corso">In Corso</option>
+                        <option value="completata">Completata</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Descrizione *</label>
+                <textarea [(ngModel)]="newRistrutturazione.descrizione" name="descrizione" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Indirizzo *</label>
+                <input type="text" [(ngModel)]="newRistrutturazione.indirizzo" name="indirizzo" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Data Inizio *</label>
+                    <input type="date" [(ngModel)]="newRistrutturazione.data_inizio" name="data_inizio" required>
+                </div>
+                <div class="form-group">
+                    <label>Data Fine *</label>
+                    <input type="date" [(ngModel)]="newRistrutturazione.data_fine" name="data_fine" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Costo (€) *</label>
+                <input type="number" [(ngModel)]="newRistrutturazione.costo" name="costo" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label>Immagini Prima</label>
+                <div class="image-upload">
+                    <input type="file" #fileNewPrima multiple accept="image/*" (change)="onImageSelect($event, 'prima')"
+                        style="display: none">
+                    <button type="button" class="btn-upload" (click)="fileNewPrima.click()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Carica Immagini Prima
+                    </button>
+                    <div class="image-gallery">
+                        <div *ngFor="let img of newRistrutturazione.immagini_prima; let i = index" class="image-item">
+                            <img [src]="img" alt="Prima">
+                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'prima')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Immagini Dopo</label>
+                <div class="image-upload">
+                    <input type="file" #fileNewDopo multiple accept="image/*" (change)="onImageSelect($event, 'dopo')"
+                        style="display: none">
+                    <button type="button" class="btn-upload" (click)="fileNewDopo.click()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Carica Immagini Dopo
+                    </button>
+                    <div class="image-gallery">
+                        <div *ngFor="let img of newRistrutturazione.immagini_dopo; let i = index" class="image-item">
+                            <img [src]="img" alt="Dopo">
+                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'dopo')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="backToList()">Annulla</button>
+                <button type="submit" class="btn-primary" [disabled]="saving">
+                    {{ saving ? 'Creazione...' : 'Crea Ristrutturazione' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

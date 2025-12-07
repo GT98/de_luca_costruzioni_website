@@ -168,6 +168,7 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
           url,
           ristrutturazione_id,
           created_at,
+          isCoverImg,
           stato
         )
       `).eq('id', id).single();
@@ -204,7 +205,7 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
         beforeImages,
         afterImages
       },
-      cover_img: afterImages.length > 0 ? afterImages[0].url : (beforeImages.length > 0 ? beforeImages[0].url : null)
+      cover_img: data.immagini.find((img: any) => img.isCoverImg)?.url || null
     };
   }
 

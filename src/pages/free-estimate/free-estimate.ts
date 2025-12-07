@@ -11,6 +11,6 @@ import { ImgSectionHeader } from "../../components/img-section-header/img-sectio
   templateUrl: './free-estimate.html',
   styleUrl: './free-estimate.scss',
 })
-export class FreeEstimate {
+export default class FreeEstimate {
 
 }
