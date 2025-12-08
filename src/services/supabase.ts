@@ -19,13 +19,13 @@ export class Supabase {
 
     // client per operazioni lato cliente (anon/public)
     this.client = createClient(this.url, this.anonKey, {
-      auth: { persistSession: false },
+      auth: { persistSession: true },
     });
 
     // client "admin" usando la service_role key (se configurata)
     if (this.serviceRoleKey) {
       this.adminClient = createClient(this.url, this.serviceRoleKey, {
-        auth: { persistSession: false },
+        auth: { persistSession: true },
       });
     }
   }

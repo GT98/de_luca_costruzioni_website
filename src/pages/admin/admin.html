@@ -4,7 +4,8 @@
             <h2>Admin Panel</h2>
         </div>
         <nav class="nav-menu">
-            <a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+            <a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                class="nav-item">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="7"></rect>
@@ -29,7 +30,10 @@
         <header class="header">
             <h1>Dashboard</h1>
             <div class="user-info">
-                <span>Amministratore</span>
+                <span>{{ authService.userEmail() }}</span>
+                @if(authService.isAuthenticated()) {
+                <button class="logout" (click)="authService.logout()">Logout</button>
+                }
             </div>
         </header>
 

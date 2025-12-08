@@ -28,25 +28,12 @@
             <div *ngFor="let r of ristrutturazioni()" class="card">
                 <div class="card-header">
                     <h3>{{ r.title }}</h3>
-                    <span class="badge" [ngClass]="'badge-' + r.stato">{{ getStatoLabel(r.stato) }}</span>
                 </div>
                 <div class="card-body">
-                    <p class="description">{{ r.descrizione }}</p>
-                    <div class="info-row">
-                        <span class="label">Indirizzo:</span>
-                        <span>{{ r.indirizzo }}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="label">Periodo:</span>
-                        <span>{{ r.data_inizio | date:'dd/MM/yyyy' }} - {{ r.data_fine | date:'dd/MM/yyyy' }}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="label">Costo:</span>
-                        <span class="price">€ {{ r.costo | number:'1.2-2' }}</span>
-                    </div>
+                    <p class="description">{{ r.description.slice(0,125) }}...</p>
                     <div class="info-row">
                         <span class="label">Immagini:</span>
-                        <span>{{ r.immagini_prima?.length }} prima, {{ r.immagini_dopo?.length }} dopo</span>
+                        <span>{{ r.beforeImages?.length }} prima, {{ r.afterImages?.length }} dopo</span>
                     </div>
                 </div>
                 <div class="card-actions">
@@ -77,14 +64,6 @@
                     <label>Titolo *</label>
                     <input type="text" [(ngModel)]="selectedRistrutturazione.title" name="titolo" required>
                 </div>
-                <div class="form-group">
-                    <label>Stato *</label>
-                    <select [(ngModel)]="selectedRistrutturazione.stato" name="stato" required>
-                        <option value="in_attesa">In Attesa</option>
-                        <option value="in_corso">In Corso</option>
-                        <option value="completata">Completata</option>
-                    </select>
-                </div>
             </div>
 
             <div class="form-group">
@@ -94,30 +73,9 @@
             </div>
 
             <div class="form-group">
-                <label>Indirizzo *</label>
-                <input type="text" [(ngModel)]="selectedRistrutturazione.indirizzo" name="indirizzo" required>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Data Inizio *</label>
-                    <input type="date" [(ngModel)]="selectedRistrutturazione.data_inizio" name="data_inizio" required>
-                </div>
-                <div class="form-group">
-                    <label>Data Fine *</label>
-                    <input type="date" [(ngModel)]="selectedRistrutturazione.data_fine" name="data_fine" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Costo (€) *</label>
-                <input type="number" [(ngModel)]="selectedRistrutturazione.costo" name="costo" step="0.01" required>
-            </div>
-
-            <div class="form-group">
                 <label>Immagini Prima</label>
                 <div class="image-upload">
-                    <input type="file" #filePrima multiple accept="image/*" (change)="onImageSelect($event, 'prima')"
+                    <input type="file" #filePrima multiple accept="image/*" (change)="onImageSelect($event, 'before')"
                         style="display: none">
                     <button type="button" class="btn-upload" (click)="filePrima.click()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -132,7 +90,7 @@
                         <div *ngFor="let img of selectedRistrutturazione.immagini.beforeImages; let i = index"
                             class="image-item">
                             <img [src]="img.url" alt="Prima">
-                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'prima')">
+                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'before')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -148,7 +106,7 @@
             <div class="form-group">
                 <label>Immagini Dopo</label>
                 <div class="image-upload">
-                    <input type="file" #fileDopo multiple accept="image/*" (change)="onImageSelect($event, 'dopo')"
+                    <input type="file" #fileDopo multiple accept="image/*" (change)="onImageSelect($event, 'after')"
                         style="display: none">
                     <button type="button" class="btn-upload" (click)="fileDopo.click()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -163,7 +121,7 @@
                         <div *ngFor="let img of selectedRistrutturazione.immagini.afterImages; let i = index"
                             class="image-item">
                             <img [src]="img.url" alt="Dopo">
-                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'dopo')">
+                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'after')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -203,48 +161,19 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Titolo *</label>
-                    <input type="text" [(ngModel)]="newRistrutturazione.titolo" name="titolo" required>
-                </div>
-                <div class="form-group">
-                    <label>Stato *</label>
-                    <select [(ngModel)]="newRistrutturazione.stato" name="stato" required>
-                        <option value="in_attesa">In Attesa</option>
-                        <option value="in_corso">In Corso</option>
-                        <option value="completata">Completata</option>
-                    </select>
+                    <input type="text" [(ngModel)]="newRistrutturazione().title" name="title" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Descrizione *</label>
-                <textarea [(ngModel)]="newRistrutturazione.descrizione" name="descrizione" rows="4" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Indirizzo *</label>
-                <input type="text" [(ngModel)]="newRistrutturazione.indirizzo" name="indirizzo" required>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Data Inizio *</label>
-                    <input type="date" [(ngModel)]="newRistrutturazione.data_inizio" name="data_inizio" required>
-                </div>
-                <div class="form-group">
-                    <label>Data Fine *</label>
-                    <input type="date" [(ngModel)]="newRistrutturazione.data_fine" name="data_fine" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Costo (€) *</label>
-                <input type="number" [(ngModel)]="newRistrutturazione.costo" name="costo" step="0.01" required>
+                <textarea [(ngModel)]="newRistrutturazione().description" name="description" rows="4" required></textarea>
             </div>
 
             <div class="form-group">
                 <label>Immagini Prima</label>
                 <div class="image-upload">
-                    <input type="file" #fileNewPrima multiple accept="image/*" (change)="onImageSelect($event, 'prima')"
+                    <input type="file" #fileNewPrima multiple accept="image/*" (change)="onImageSelect($event, 'before')"
                         style="display: none">
                     <button type="button" class="btn-upload" (click)="fileNewPrima.click()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -256,9 +185,9 @@
                         Carica Immagini Prima
                     </button>
                     <div class="image-gallery">
-                        <div *ngFor="let img of newRistrutturazione.immagini_prima; let i = index" class="image-item">
+                        <div *ngFor="let img of newRistrutturazione().beforePreviews; let i = index" class="image-item">
                             <img [src]="img" alt="Prima">
-                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'prima')">
+                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'before')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -274,7 +203,7 @@
             <div class="form-group">
                 <label>Immagini Dopo</label>
                 <div class="image-upload">
-                    <input type="file" #fileNewDopo multiple accept="image/*" (change)="onImageSelect($event, 'dopo')"
+                    <input type="file" #fileNewDopo multiple accept="image/*" (change)="onImageSelect($event, 'after')"
                         style="display: none">
                     <button type="button" class="btn-upload" (click)="fileNewDopo.click()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -286,9 +215,9 @@
                         Carica Immagini Dopo
                     </button>
                     <div class="image-gallery">
-                        <div *ngFor="let img of newRistrutturazione.immagini_dopo; let i = index" class="image-item">
+                        <div *ngFor="let img of newRistrutturazione().afterPreviews; let i = index" class="image-item">
                             <img [src]="img" alt="Dopo">
-                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'dopo')">
+                            <button type="button" class="btn-remove-image" (click)="removeImage(i, 'after')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">

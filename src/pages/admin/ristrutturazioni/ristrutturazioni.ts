@@ -11,13 +11,21 @@ import { Supabase } from '../../../services/supabase';
 })
 export default class Ristrutturazioni {
 
+  private readonly STORAGE_BUCKET = 'immagini_lavori';
   view: 'list' | 'detail' | 'new' = 'list';
   loading = signal(false);
   saving = false;
 
   ristrutturazioni = signal<any>([]);
   selectedRistrutturazione: any | null = null;
-  newRistrutturazione: any = this.getEmptyRistrutturazione();
+  newRistrutturazione = signal<any>({
+    title: '',
+    description: '',
+    beforeFiles: [],
+    afterFiles: [],
+    beforePreviews: [],
+    afterPreviews: []
+  })
 
   constructor(private supabase: Supabase) {
 
@@ -27,18 +35,13 @@ export default class Ristrutturazioni {
     this.loadRistrutturazioni();
   }
 
-  getEmptyRistrutturazione(): any {
-    return {
-      titolo: '',
-      descrizione: '',
-      indirizzo: '',
-      data_inizio: '',
-      data_fine: '',
-      stato: 'in_attesa',
-      costo: 0,
-      immagini_prima: [],
-      immagini_dopo: []
-    };
+  getEmptyRistrutturazione(): WritableSignal<any> {
+    return signal<any>({
+      title: '',
+      description: '',
+      beforeImages: [],
+      afterImages: []
+    });
   }
 
   async loadRistrutturazioni() {
@@ -76,8 +79,8 @@ export default class Ristrutturazioni {
 
   organizeData(data: any): any {
     if (!data) return data;
-    const beforeImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'prima');
-    const afterImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'dopo');
+    const beforeImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'before');
+    const afterImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'after');
     return {
       ...data,
       immagini: {
@@ -90,23 +93,40 @@ export default class Ristrutturazioni {
 
   async createRistrutturazione() {
     this.saving = true;
-    try {
-      const { error } = await this.supabase
-        .from('ristrutturazioni')
-        .update(this.selectedRistrutturazione)
-        .eq('id', this.selectedRistrutturazione?.id);
+    const { title, description, beforeFiles, afterFiles } = this.newRistrutturazione();
 
-      if (error) throw error;
+    // --- 1. CARICAMENTO DEI FILE NELLO STORAGE ---
+    console.log('Fase 1: Caricamento immagini...');
+    const uploadedBeforeUrls = await this.uploadFiles(beforeFiles, 'before_images');
+    const uploadedAfterUrls = await this.uploadFiles(afterFiles, 'after_images');
 
-      alert('Ristrutturazione aggiornata con successo!');
-      this.backToList();
-      this.loadRistrutturazioni();
-    } catch (error) {
-      console.error('Errore aggiornamento:', error);
-      alert('Errore nell\'aggiornamento');
-    } finally {
-      this.saving = false;
-    }
+    // --- 2. SALVATAGGIO DEI DATI PRINCIPALI ---
+    console.log('Fase 2: Salvataggio ristrutturazione principale...');
+    const { data: ristrutturazione, error: mainError } = await this.supabase
+      .from('ristrutturazioni') // Nome della tua tabella principale
+      .insert({ title, description })
+      .select('id') // Ottieni l'ID della riga appena creata
+      .single();
+
+    if (mainError) throw mainError;
+    if (!ristrutturazione) throw new Error('Impossibile ottenere l\'ID della nuova ristrutturazione.');
+
+    const ristrutturazioneId = ristrutturazione.id;
+
+    // --- 3. SALVATAGGIO DEGLI URL NELLA TABELLA CORRELATA ---
+    console.log('Fase 3: Salvataggio URL delle immagini...');
+    const allImageUrls = [
+      ...uploadedBeforeUrls.map(url => ({ ristrutturazione_id: ristrutturazioneId, url: url, stato: 'before' })),
+      ...uploadedAfterUrls.map(url => ({ ristrutturazione_id: ristrutturazioneId, url: url, stato: 'after' }))
+    ];
+
+    const { error: imageError } = await this.supabase
+      .from('immagini') // Nome della tua tabella secondaria
+      .insert(allImageUrls);
+
+    if (imageError) throw imageError;
+
+    console.log('Ristrutturazione creata con successo!');
   }
 
   async updateRistrutturazione() {
@@ -155,58 +175,66 @@ export default class Ristrutturazioni {
     }
   }
 
-  async onImageSelect(event: Event, tipo: 'prima' | 'dopo') {
+  async onImageSelect(event: Event, stato: 'before' | 'after') {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
 
     const files = Array.from(input.files);
 
+    // 1. Array temporaneo per tenere traccia dei nuovi file e delle nuove preview
+    const newFiles: File[] = [];
+    const newPreviews: string[] = [];
+
+    // Itera attraverso i file
     for (const file of files) {
-      // Converti l'immagine in base64 per preview
+      newFiles.push(file);
+
+      // Crea la Promessa per la lettura in Base64
       const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64 = e.target?.result as string;
+      const base64Promise = new Promise<string>((resolve) => {
+        reader.onload = (e) => {
+          resolve(e.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+      });
 
-        if (this.view === 'new') {
-          if (tipo === 'prima') {
-            this.newRistrutturazione.immagini_prima.push(base64);
-          } else {
-            this.newRistrutturazione.immagini_dopo.push(base64);
-          }
-        } else if (this.selectedRistrutturazione) {
-          if (tipo === 'prima') {
-            this.selectedRistrutturazione.immagini_prima.push(base64);
-          } else {
-            this.selectedRistrutturazione.immagini_dopo.push(base64);
-          }
-        }
-      };
-      reader.readAsDataURL(file);
-
-      // IMPORTANTE: Per un'implementazione completa, dovresti caricare 
-      // le immagini su Supabase Storage e salvare gli URL invece di base64
-      // Esempio:
-      // const { data, error } = await this.supabase.storage
-      //   .from('ristrutturazioni-images')
-      //   .upload(`${Date.now()}-${file.name}`, file);
+      // Aggiungi la stringa Base64 all'array delle preview
+      newPreviews.push(await base64Promise);
     }
 
-    // Reset input
+    // 2. Aggiorna lo stato del Signal una sola volta (più performante)
+    this.newRistrutturazione.update(r => {
+      if (stato === 'before') {
+        return {
+          ...r,
+          beforeFiles: [...(r.beforeFiles ?? []), ...newFiles],
+          beforePreviews: [...(r.beforePreviews ?? []), ...newPreviews]
+        };
+      } else {
+        return {
+          ...r,
+          afterFiles: [...(r.afterFiles ?? []), ...newFiles],
+          afterPreviews: [...(r.afterPreviews ?? []), ...newPreviews]
+        };
+      }
+    });
+
+    // Reset input per consentire il caricamento dello stesso file
     input.value = '';
   }
 
-  removeImage(index: number, tipo: 'prima' | 'dopo') {
+  removeImage(index: number, tipo: 'before' | 'after') {
     if (this.view === 'new') {
-      if (tipo === 'prima') {
-        this.newRistrutturazione.immagini_prima.splice(index, 1);
+      if (tipo === 'before') {
+        this.newRistrutturazione.update(r => ({ ...r, beforeImages: r.beforeImages.filter((_: any, i: number) => i !== index) }));
       } else {
-        this.newRistrutturazione.immagini_dopo.splice(index, 1);
+        this.newRistrutturazione.update(r => ({ ...r, afterImages: r.afterImages.filter((_: any, i: number) => i !== index) }));
       }
     } else if (this.selectedRistrutturazione) {
-      if (tipo === 'prima') {
-        this.selectedRistrutturazione.immagini_prima.splice(index, 1);
+      if (tipo === 'after') {
+        this.selectedRistrutturazione.beforeImages.splice(index, 1);
       } else {
-        this.selectedRistrutturazione.immagini_dopo.splice(index, 1);
+        this.selectedRistrutturazione.afterImages.splice(index, 1);
       }
     }
   }
@@ -235,4 +263,33 @@ export default class Ristrutturazioni {
     };
     return labels[stato] || stato;
   }
+
+  // Funzione helper per caricare i file su Supabase Storage
+  private async uploadFiles(files: File[], folderName: string): Promise<string[]> {
+    const urls: string[] = [];
+
+    for (const file of files) {
+      // 2. Genera il percorso unico del file
+      const fileName = `${Date.now()}_${file.name}`;
+      const filePath = `${folderName}/${fileName}`;
+
+      const { data, error } = await this.supabase.getClient().storage
+        .from(this.STORAGE_BUCKET) // <-- Indica il bucket principale
+        .upload(filePath, file);   // <-- Usa il percorso completo (inclusa la cartella)
+
+      if (error) {
+        throw error;
+      }
+
+      // 4. Ottieni l'URL pubblico (usando lo stesso bucket e il path completo)
+      const publicUrl = this.supabase.getClient().storage
+        .from(this.STORAGE_BUCKET)
+        .getPublicUrl(data.path)
+        .data.publicUrl;
+
+      urls.push(publicUrl);
+    }
+    return urls;
+  }
+
 }

@@ -197,8 +197,8 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
 
   organizeData(data: any): any {
     if (!data) return data;
-    const beforeImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'prima');
-    const afterImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'dopo');
+    const beforeImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'before');
+    const afterImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'after');
     return {
       ...data,
       immagini: {

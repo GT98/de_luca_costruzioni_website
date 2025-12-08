@@ -78,6 +78,15 @@
   color: #64748b;
 }
 
+.logout {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
 .content {
   flex: 1;
   overflow-y: auto;

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-admin',
@@ -8,5 +9,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './admin.scss',
 })
 export default class Admin {
+
+  authService = inject(AuthService);
 
 }

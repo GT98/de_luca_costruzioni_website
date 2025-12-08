@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     { path: '', loadComponent: () => import('./pages/home/home').then(m => m.default) },
@@ -11,9 +12,10 @@ export const routes: Routes = [
     { path: 'free_estimate', loadComponent: () => import('./pages/free-estimate/free-estimate').then(m => m.default) },
     {
         path: 'admin', loadComponent: () => import('./pages/admin/admin').then(m => m.default), children: [
-            { path: 'dashboard', loadComponent: () => import('./pages/admin/dashboard/dashboard').then(m => m.default) },
-            { path: 'ristrutturazioni', loadComponent: () => import('./pages/admin/ristrutturazioni/ristrutturazioni').then(m => m.default) },
-
+            { path: 'login', loadComponent: () => import('./pages/admin/login/login').then(m => m.default) },
+            { path: '', loadComponent: () => import('./pages/admin/dashboard/dashboard').then(m => m.default), canActivate: [authGuard], },
+            { path: 'dashboard', loadComponent: () => import('./pages/admin/dashboard/dashboard').then(m => m.default), canActivate: [authGuard], },
+            { path: 'ristrutturazioni', loadComponent: () => import('./pages/admin/ristrutturazioni/ristrutturazioni').then(m => m.default), canActivate: [authGuard] },
         ]
     },
 ]
