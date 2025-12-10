@@ -1,3 +1,9 @@
+//override styles.scss container for max-width to 100%%
+::ng-deep .container {
+    max-width: 100%!important;
+}
+
+
 .dashboard-container {
   display: flex;
   height: 100vh;

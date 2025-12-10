@@ -27,16 +27,17 @@
     </aside>
 
     <main class="main-content">
+        @if(authService.isAuthenticated()) {
         <header class="header">
             <h1>Dashboard</h1>
             <div class="user-info">
                 <span>{{ authService.userEmail() }}</span>
-                @if(authService.isAuthenticated()) {
+
                 <button class="logout" (click)="authService.logout()">Logout</button>
-                }
+
             </div>
         </header>
-
+        }
         <div class="content">
             <router-outlet></router-outlet>
         </div>

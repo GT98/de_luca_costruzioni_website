@@ -6,6 +6,7 @@ import { Supabase } from '../../services/supabase';
 import Swiper from 'swiper';
 import { Pagination, Navigation, Thumbs } from 'swiper/modules';
 import { Subscription } from 'rxjs';
+import { ImageData } from '../../models/image-data';
 
 @Component({
   selector: 'app-portfolio-detail',
@@ -56,7 +57,7 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
   get previousProject(): any | null {
     const currentId = this.project()?.id;
     if (!currentId || !this.allProjects.length) return null;
-    
+
     // Usa findIndex ma con l'assumption che la lista non sia troppo grande
     // oppure potrebbe essere ottimizzato ulteriormente con indici persistenti
     const currentIdx = this.allProjects.findIndex((p: any) => p.id === currentId);
@@ -69,7 +70,7 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
   get nextProject(): any | null {
     const currentId = this.project()?.id;
     if (!currentId || !this.allProjects.length) return null;
-    
+
     const currentIdx = this.allProjects.findIndex((p: any) => p.id === currentId);
     if (currentIdx >= 0 && currentIdx < this.allProjects.length - 1) {
       return this.allProjects[currentIdx + 1];
@@ -152,7 +153,7 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
 
   private async loadProjectById(id: string): Promise<void> {
     this.loading.set(true);
-    
+
     // Traccia indice del progetto corrente
     this.currentProjectIndex = this.allProjects.findIndex((p: any) => p.id === parseInt(id));
 
@@ -169,9 +170,13 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
           ristrutturazione_id,
           created_at,
           isCoverImg,
-          stato
+          stato,
+          order_index
         )
-      `).eq('id', id).single();
+      `)
+      .order('order_index', { foreignTable: 'immagini', ascending: true })
+      .eq('id', id)
+      .single();
 
     this.loading.set(false);
     if (error) {
@@ -205,8 +210,22 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
         beforeImages,
         afterImages
       },
-      cover_img: data.immagini.find((img: any) => img.isCoverImg)?.url || null
+      cover_img: this.getCoverImage(beforeImages, afterImages)?.url
     };
+  }
+
+  getCoverImage(beforeImages: ImageData[], afterImages: ImageData[]): ImageData | null {
+    if (!beforeImages || !afterImages) return null;
+    if (afterImages.length > 0) {
+      const coverAfter = afterImages.find((img: ImageData) => img.isCoverImg);
+      if (coverAfter) return coverAfter;
+    } else {
+      if (beforeImages.length > 0) {
+        const coverBefore = beforeImages.find((img: ImageData) => img.isCoverImg);
+        if (coverBefore) return coverBefore;
+      }
+    };
+    return null
   }
 
   initSwiper(): void {
@@ -300,7 +319,7 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
 
     this._fullscreenCategory.set(category);
     this.fullscreenOpen = true;
-    
+
     // blocca lo scroll del body e mantiene la posizione corrente
     try {
       this._prevBodyOverflow = document.body.style.overflow;
@@ -326,15 +345,15 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
     setTimeout(() => {
       // Forza Angular a renderizzare il template con la nuova categoria
       this.cdr.detectChanges();
-      
+
       if (!this.fullscreenSwiper || !this.thumbsSwiper) {
         this.initFullscreenSwipers();
       }
-      
+
       // Aggiorna swiper per ricontare i nuovi slide (categoria cambiata)
       this.thumbsSwiper?.update();
       this.fullscreenSwiper?.update();
-      
+
       const targetIndex = idx >= 0 ? idx : 0;
       // slideTo usa indice dello slide (non loop), usiamo 0-based
       this.fullscreenSwiper?.slideTo(targetIndex, 0);
@@ -387,10 +406,10 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
         (this.thumbsSwiper as any).destroy();
       }
     } catch (e) { }
-    
+
     // Cleanup cache
     this.projectsCache.clear();
-    
+
     window.removeEventListener('keydown', this._onKeyDown);
     this._routeSub?.unsubscribe();
     // ripristina body se qualcosa è rimasto
@@ -417,7 +436,7 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
         ...(immagini.beforeImages ?? []),
         ...(immagini.afterImages ?? [])
       ];
-      
+
       const limit = Math.min(20, allImages.length);
       for (let i = 0; i < limit; i++) {
         const url = allImages[i]?.url;
@@ -426,7 +445,7 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
           img.src = url;
         }
       }
-      
+
       const cover = this.project()?.cover_img;
       if (cover) {
         const c = new Image();
