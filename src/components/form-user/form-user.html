@@ -3,29 +3,34 @@
     <div class="form-wrapper">
       
       <div class="header-text">
-        <h2>CERCHI INFORMAZIONI? LOREM IPSUM DOLOR SIT AMET CONSECTETUR.</h2>
-        <p>Lorem ipsum dolor sit amet consectetur. Mauris purus netus nibh facilisis sit. Fermentum nunc aliquam adipiscing vitae urna vel. Nullam malesuada fringilla sed mi.</p>
+        <h2>CERCHI INFORMAZIONI ?</h2>
+        <p>Compila il form sottostante per richiedere informazioni. Ti contatteremo al più presto.</p>
       </div>
   
-      <form class="user-form">
+      <form class="user-form" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
         
-        <input type="text" placeholder="Nome*" required>
-        <input type="text" placeholder="Cognome*" required>
-        <input type="tel" placeholder="Telefono*" required>
-        <input type="text" placeholder="Indirizzo">
-        <input type="email" placeholder="E-mail*" required>
-        <input type="text" placeholder="Tipologia di servizio">
+        <input type="text" placeholder="Nome*" formControlName="name" required> 
+        
+        <input type="text" placeholder="Cognome*" formControlName="surname" required>
+        
+        <input type="tel" placeholder="Telefono*" formControlName="mobile" required>
+        
+        <input type="text" placeholder="Indirizzo" formControlName="address">
+        
+        <input type="email" placeholder="E-mail*" formControlName="email" required>
+        
+        <input type="text" placeholder="Tipologia di servizio" formControlName="service_type">
   
-        <textarea placeholder="Messaggio"></textarea>
+        <textarea placeholder="Messaggio" formControlName="message"></textarea>
   
         <div class="privacy-checkbox">
-          <input type="checkbox" id="privacy" required>
+          <input type="checkbox" id="privacy" formControlName="privacy_accepted" required>
           <label for="privacy">
             Dichiaro di aver letto, compreso e di accettare pienamente l'Informativa sulla Privacy e autorizzo il trattamento dei miei dati personali, come indicato nell'Informativa.*
           </label>
         </div>
   
-        <button type="submit" class="submit-button">Invia richiesta</button>
+        <button type="submit" class="submit-button" [disabled]="!contactForm.valid">Invia richiesta</button>
         
       </form>
     </div>

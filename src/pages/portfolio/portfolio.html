@@ -5,18 +5,18 @@
   <div class="filters-and-content-wrapper">
 
     <div class="filters-container">
-      @for (category of categories; track category) {
+      @for (category of categories(); track category) {
         <button 
           class="filter-button" 
-          [class.active]="selectedCategory === category" 
-          (click)="filterProjects(category)">
-          {{ category }}
+          [class.active]="selectedCategory === category.id" 
+          (click)="filterProjects(category.id)">
+          {{ category.name }}
         </button>
       }
     </div>
 
     <div class="projects-grid">
-      @for (project of filteredProjects; track project.id) {
+      @for (project of filteredProjects(); track project.id) {
         <div class="project-card">
           <div (click)="goToDetail(project)" class="project-image-wrapper">
             <img [src]="project.cover_img" [alt]="project.title">
