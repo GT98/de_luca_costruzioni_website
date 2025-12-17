@@ -16,7 +16,7 @@
     </div>
 
     <div class="projects-grid">
-      @for (project of filteredProjects(); track project.id) {
+      @for (project of ristrutturazioni(); track project.id) {
         <div class="project-card">
           <div (click)="goToDetail(project)" class="project-image-wrapper">
             <img [src]="project.cover_img" [alt]="project.title">

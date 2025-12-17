@@ -7,6 +7,7 @@ import Swiper from 'swiper';
 import { Pagination, Navigation, Thumbs } from 'swiper/modules';
 import { Subscription } from 'rxjs';
 import { ImageData } from '../../models/image-data';
+import { RistrutturazioniService } from '../../services/ristrutturazioni';
 
 @Component({
   selector: 'app-portfolio-detail',
@@ -18,6 +19,7 @@ import { ImageData } from '../../models/image-data';
 export default class PortfolioDetail implements OnInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private ristrutturazioniService = inject(RistrutturazioniService);
   private supabase = inject(Supabase);
   private cdr = inject(ChangeDetectorRef);
   private swiper?: Swiper;
@@ -127,18 +129,15 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
       }
 
       // Se non in cache, carica da Supabase
-      const { data, error } = await this.supabase
-        .from('ristrutturazioni')
-        .select('id, title, description, createdAt')
-        .order('createdAt', { ascending: false });
+      await this.ristrutturazioniService.getRistrutturazioni();
 
-      if (!error && data) {
+      const data = this.ristrutturazioniService.ristrutturazioni();
+
+      if (data.length > 0) {
         this.allProjects = data;
         // Popola mappa per ricerche veloci
         this.projectsCache.clear();
-        data.forEach((p: any) => {
-          this.projectsCache.set(p.id, p);
-        });
+
         // Cache nella sessione
         try {
           sessionStorage.setItem('portfolio_projects_list', JSON.stringify(data));
@@ -152,39 +151,11 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
   }
 
   private async loadProjectById(id: string): Promise<void> {
-    this.loading.set(true);
 
     // Traccia indice del progetto corrente
-    this.currentProjectIndex = this.allProjects.findIndex((p: any) => p.id === parseInt(id));
+    this.currentProjectIndex = this.allProjects.findIndex((p: any) => p.id === id);
 
-    const { data, error } = await this.supabase
-      .from('ristrutturazioni')
-      .select(`
-        id,
-        title,
-        description,
-        createdAt,
-        immagini (
-          id,
-          url,
-          ristrutturazione_id,
-          created_at,
-          isCoverImg,
-          stato,
-          order_index
-        )
-      `)
-      .order('order_index', { foreignTable: 'immagini', ascending: true })
-      .eq('id', id)
-      .single();
-
-    this.loading.set(false);
-    if (error) {
-      console.error('Errore nel recupero dettaglio:', error);
-      return;
-    }
-
-    this.project.set(this.organizeData(data));
+    this.project.set(this.allProjects[this.currentProjectIndex] || null);
 
     // ensure swipers are re-initialized for the new content
     setTimeout(() => {
@@ -198,20 +169,6 @@ export default class PortfolioDetail implements OnInit, OnDestroy {
       // preload images for immediate display
       this.preloadImages();
     }, 100);
-  }
-
-  organizeData(data: any): any {
-    if (!data) return data;
-    const beforeImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'before');
-    const afterImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'after');
-    return {
-      ...data,
-      immagini: {
-        beforeImages,
-        afterImages
-      },
-      cover_img: this.getCoverImage(beforeImages, afterImages)?.url
-    };
   }
 
   getCoverImage(beforeImages: ImageData[], afterImages: ImageData[]): ImageData | null {

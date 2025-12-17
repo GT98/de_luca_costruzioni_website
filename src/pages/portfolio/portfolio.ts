@@ -1,10 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
-import { HeroBanner } from "../../components/hero-banner/hero-banner";
-import { FollowOn } from "../../components/follow-on/follow-on";
-import { Supabase } from '../../services/supabase';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { FollowOn } from "../../components/follow-on/follow-on";
+import { HeroBanner } from "../../components/hero-banner/hero-banner";
 import { RistrutturazioniService } from '../../services/ristrutturazioni';
-import { JsonPipe } from '@angular/common';
 
 interface Project {
   id: number;
@@ -42,14 +40,6 @@ export default class Portfolio {
   filterProjects(categoryId: number): void {
     this.selectedCategory = categoryId;
     this.ristrutturazioniService.getRistrutturazioni(categoryId === 0 ? 0 : categoryId);
-  }
-
-  // Questo getter restituirà i progetti filtrati per la visualizzazione
-  get filteredProjects() {
-    if (this.selectedCategory === 0) {
-      return this.ristrutturazioni;
-    }
-    return this.ristrutturazioni;
   }
 
   goToDetail(project: any): void {

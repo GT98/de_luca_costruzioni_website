@@ -11,11 +11,11 @@
         <!-- Swiper Container -->
         <div class="swiper portfolio-swiper">
             <div class="swiper-wrapper">
-                <div *ngFor="let project of projects()" class="swiper-slide">
+                <div *ngFor="let project of ristrutturazioni()" class="swiper-slide">
 
                     <div routerLink="/portfolio/{{project.id}}" class="project-card">
                         <div class="project-image-wrapper">
-                            <img [src]="project.immagini[0]?.url" [alt]="project.title" class="project-image" loading="lazy">
+                            <img [src]="project?.cover_img" [alt]="project.title" class="project-image" loading="lazy">
                             <div class="project-overlay">
                                 <div class="overlay-content">
                                     <h3 class="project-title">{{ project.title }}</h3>

@@ -57,12 +57,24 @@ export class RistrutturazioniService {
 
     const { data, error } = await query;
 
-    this.ristrutturazioni.set((data ?? []).map(ristrutturazione => ({
-      ...ristrutturazione,
-      immagini: (ristrutturazione.immagini ?? []),
-      cover_img: ristrutturazione.immagini.find((img: any) => img.isCoverImg)?.url || null
-    })));
+    if (error) throw error;
 
+    this.ristrutturazioni.set((data ?? []).map(item => this.organizeData(item)));
+
+  }
+
+  organizeData(data: any): any {
+    if (!data) return data;
+    const beforeImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'before');
+    const afterImages = (data.immagini ?? []).filter((img: any) => img.stato.toLowerCase() === 'after');
+    return {
+      ...data,
+      immagini: {
+        beforeImages,
+        afterImages
+      },
+      cover_img: this.getCoverImage(beforeImages, afterImages)?.url
+    };
   }
 
   getCoverImage(beforeImages: ImageData[], afterImages: ImageData[]): ImageData | null {

@@ -27,13 +27,13 @@ export class PortfolioList implements OnInit, OnDestroy {
   private swiper?: Swiper;
   showSectionLabel = input<boolean>(true);
   showDescriptions = input<boolean>(false);
-  projects = this.ristrutturazioniService.ristrutturazioni;
+  ristrutturazioni = this.ristrutturazioniService.ristrutturazioni;
 
   ngOnInit(): void {
     this.ristrutturazioniService.getRistrutturazioni();
     setTimeout(() => {
       this.initSwiper();
-    }, 100);
+    }, 200);
   }
 
   initSwiper(): void {
