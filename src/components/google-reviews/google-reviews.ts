@@ -104,6 +104,10 @@ export class GoogleReviews implements OnInit {
           slidesPerView: 3,
           spaceBetween: 30,
         },
+        1440: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
       },
     });
   }

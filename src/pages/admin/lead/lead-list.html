@@ -1,0 +1,180 @@
+<div class="leads-container">
+    <div class="header">
+        <div>
+            <h1>Richieste Ricevute</h1>
+            <p class="subtitle">Gestisci le richieste di contatto e collaborazioni</p>
+        </div>
+        <div class="stats">
+            <div class="stat-badge">
+                <span class="stat-value">{{ leads().length }}</span>
+                <span class="stat-label">Totali</span>
+            </div>
+            <div class="stat-badge unread">
+                <span class="stat-value">{{ getUnreadCount() }}</span>
+                <span class="stat-label">Non letti</span>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="loading()" class="loading-state">
+        <div class="spinner"></div>
+        <p>Caricamento lead in corso...</p>
+    </div>
+
+    <div *ngIf="!loading() && leads().length === 0" class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <h2>Nessun lead ricevuto</h2>
+        <p>Quando riceverai richieste di contatto, appariranno qui</p>
+    </div>
+
+    <div *ngIf="!loading() && leads().length > 0" class="leads-list">
+        <div *ngFor="let lead of leads()" class="lead-card" [class.unread]="!lead.read" (click)="viewLead(lead)">
+            <div class="lead-header">
+                <div class="lead-info">
+                    <div class="lead-name">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>{{ lead.name || 'Nome non disponibile' }}</span>
+                    </div>
+                    <div class="lead-date">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        {{ lead.created_at | date:'dd/MM/yyyy HH:mm' }}
+                    </div>
+                </div>
+                <div class="lead-status">
+                    <span *ngIf="!lead.read" class="status-badge new">Nuovo</span>
+                    <span *ngIf="lead.read" class="status-badge read">Letto</span>
+                </div>
+            </div>
+
+            <div class="lead-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                            </path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <a [href]="'mailto:' + (lead.email || '')" (click)="$event.stopPropagation()">
+                            {{ lead.email || 'Email non disponibile' }}
+                        </a>
+                    </div>
+                    <div class="contact-item" *ngIf="lead.mobile">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                            </path>
+                        </svg>
+                        <a [href]="'tel:' + (lead.mobile || '')" (click)="$event.stopPropagation()">
+                            {{ lead.mobile }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lead-message">
+                    <p>{{ truncateMessage(lead.message || '') }}</p>
+                </div>
+            </div>
+
+            <div class="lead-actions">
+                <button class="btn-action primary" (click)="openLeadDetail(lead, $event)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                    Dettagli
+                </button>
+                <button class="btn-action secondary" (click)="toggleRead(lead, $event)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline *ngIf="!lead.read" points="20 6 9 17 4 12"></polyline>
+                        <path *ngIf="lead.read" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle *ngIf="lead.read" cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    {{ lead.read ? 'Non letto' : 'Segna letto' }}
+                </button>
+                <button class="btn-action danger" (click)="deleteLead(lead, $event)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    Elimina
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Dettaglio -->
+    <div *ngIf="selectedLead" class="modal-overlay" (click)="closeModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Dettaglio Lead</h2>
+                <button class="btn-close" (click)="closeModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="detail-section">
+                    <label>Nome</label>
+                    <p>{{ selectedLead.name || '-' }}</p>
+                </div>
+
+                <div class="detail-section">
+                    <label>Email</label>
+                    <p>
+                        <a [href]="'mailto:' + (selectedLead.email || '')">
+                            {{ selectedLead.email || '-' }}
+                        </a>
+                    </p>
+                </div>
+
+                <div class="detail-section" *ngIf="selectedLead.mobile">
+                    <label>Telefono</label>
+                    <p>
+                        <a [href]="'tel:' + (selectedLead.mobile || '')">
+                            {{ selectedLead.mobile }}
+                        </a>
+                    </p>
+                </div>
+
+                <div class="detail-section">
+                    <label>Data ricezione</label>
+                    <p>{{ selectedLead.created_at | date:'dd/MM/yyyy - HH:mm:ss' }}</p>
+                </div>
+
+                <div class="detail-section full">
+                    <label>Messaggio</label>
+                    <div class="message-box">
+                        {{ selectedLead.message || '-' }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-modal secondary" (click)="closeModal()">Chiudi</button>
+                <button class="btn-modal danger" (click)="deleteLead(selectedLead)">Elimina</button>
+            </div>
+        </div>
+    </div>
+</div>

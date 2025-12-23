@@ -6,14 +6,28 @@ $divider-color: #ffffff66;
 .app-footer {
   background-color: $dark-bg;
   color: $text-color;
-  font-family: 'Outfit', sans-serif; /* Usa il tuo font Outfit */
-  padding: 70px 70px 40px 70px; /* Top, Right, Bottom, Left padding */
+  font-family: 'Outfit', sans-serif;
+  padding: 70px 1rem 40px 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  @media (min-width: 1024px) {
-    padding: 70px 37px 50px 37px; /* Aumenta il padding su schermi più grandi */
+  @media (min-width: 768px) {
+    padding: 70px 2rem 50px 2rem;
   }
 
-  position: relative;
+  @media (min-width: 1024px) {
+    padding: 70px 61px 50px 61px;
+  }
+
+  @media (min-width: 1441px) {
+    padding: 70px 125px 50px 125px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  box-sizing: border-box;
 }
 
 .footer_img {
@@ -26,191 +40,195 @@ $divider-color: #ffffff66;
 /* --- Layout delle Colonne (Flexbox) --- */
 .footer-content {
   display: flex;
-  justify-content: space-between; /* Distribuisce le colonne */
+  justify-content: space-between;
   flex-direction: column;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding-bottom: 100px;
+  box-sizing: border-box;
 
   @media (min-width: 768px) and (max-width: 1023px) {
-    text-align: center; /* Dispone le colonne in fila su schermi più larghi */
+    text-align: center;
   }
 
   @media (min-width: 1024px) {
-    flex-direction: row; /* Dispone le colonne in fila su schermi più larghi */
-  }
-
-  flex-wrap: wrap;
-
-  @media (min-width: 1024px) {
+    flex-direction: row;
     flex-wrap: nowrap;
   }
 
-  gap: 30px; /* Spazio tra le colonne */
-  max-width: 1440px; /* Limita la larghezza massima del contenuto */
-  margin: 0 auto; /* Centra il contenuto */
-  padding-bottom: 100px;
-}
+  .col {
+    display: flex;
+    flex-direction: column;
 
-.col {
-  display: flex;
-  flex-direction: column;
-
-  h3 {
-    color: $light-blue;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1.75rem;
-    letter-spacing: 0.5px;
-  }
-}
-
-/* --- Stile Colonna Logo --- */
-.footer-col-logo {
-  flex-basis: 25%; /* Alloca un po' più di spazio per il logo */
-  align-items: flex-start;
-
-  @media (min-width: 768px) and (max-width: 1023px) {
-    align-items: center; /* Dispone le colonne in fila su schermi più larghi */
-  }
-
-  img {
-    width: 270px; /* Larghezza del logo */
-    height: auto;
-    margin-bottom: 30px;
-  }
-
-  .cta {
-    font-size: 1rem;
-  }
-}
-
-.footer-button {
-  background: none;
-  color: $text-color;
-  border: 1px solid $text-color;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-  font-weight: 500;
-
-  &:hover {
-    background-color: $light-blue;
-    border-color: $light-blue;
-  }
-}
-
-/* --- Stile Dettagli Aziendali e Contatti --- */
-.footer-col-details,
-.footer-col-contact {
-  flex-basis: 25%;
-  font-size: 1rem;
-
-  div {
-    margin-bottom: 1rem;
-  }
-
-  p {
-    margin-bottom: 10px;
-    line-height: 1.4;
-  }
-}
-
-/* --- Stile Sitemap --- */
-.footer-col-sitemap {
-  flex-basis: 15%; /* Colonna più stretta */
-
-  a {
-    color: $text-color;
-    text-decoration: none;
-    margin-bottom: 1rem;
-    transition: color 0.2s ease;
-
-    &:hover {
+    h3 {
       color: $light-blue;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.75rem;
+      letter-spacing: 0.5px;
     }
   }
-}
 
-/* --- Contatti e Social Media --- */
-.contact-info {
-  margin-bottom: 25px;
-  .label {
-    font-weight: bold;
-    min-width: 70px; /* Allinea i due punti */
-    display: inline-block;
-  }
-  p {
-    display: flex;
-    span {
-      display: inline-block;
+  /* --- Stile Colonna Logo --- */
+  .footer-col-logo {
+    flex-basis: 25%; /* Alloca un po' più di spazio per il logo */
+    align-items: flex-start;
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+      align-items: center; /* Dispone le colonne in fila su schermi più larghi */
+    }
+
+    img {
+      width: 270px; /* Larghezza del logo */
+
+      @media (min-width: 1024px) {
+        
+      }
+
+      height: auto;
+      margin-bottom: 30px;
+    }
+
+    .cta {
+      font-size: 1rem;
     }
   }
-}
 
-.social-icons {
-  display: flex;
-  gap: 15px;
-
-  @media (min-width: 768px) and (max-width: 1023px) {
-    justify-content: center; /* Dispone le colonne in fila su schermi più larghi */
-  }
-
-  .social-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 35px;
-    height: 35px;
-    background-color: white;
-    border-radius: 50%;
-    font-size: 1.2em;
-
-    /* Nota: Qui dovrai sostituire il testo del placeholder  con la tua libreria di icone (es. Font Awesome, o SVG) */
-    text-decoration: none;
-    transition: background-color 0.2s ease;
+  .footer-button {
+    background: none;
+    color: $text-color;
+    border: 1px solid $text-color;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-weight: 500;
 
     &:hover {
       background-color: $light-blue;
-      &:hover img {
-        content: url('/assets/icons/instagram_hover.svg'); // Cambia il percorso per ogni icona
-      }
+      border-color: $light-blue;
+    }
+  }
 
-      &.facebook:hover img {
-        content: url('/assets/icons/facebook_hover.svg');
-      }
+  /* --- Stile Dettagli Aziendali e Contatti --- */
+  .footer-col-details,
+  .footer-col-contact {
+    flex-basis: 25%;
+    font-size: 1rem;
 
-      &.twitter:hover img {
-        content: url('/assets/icons/linkedin_hover.svg');
-      }
+    div {
+      margin-bottom: 1rem;
+    }
 
-      &.tiktok:hover img {
-        content: url('/assets/icons/tiktok_hover.svg');
+    p {
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+  }
+
+  /* --- Stile Sitemap --- */
+  .footer-col-sitemap {
+    flex-basis: 15%; /* Colonna più stretta */
+
+    a {
+      color: $text-color;
+      text-decoration: none;
+      margin-bottom: 1rem;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $light-blue;
       }
     }
   }
-}
 
-/* --- Copyright e Separatore --- */
-.footer-bottom {
-  max-width: 1400px;
-  margin: 0 auto;
-}
+  /* --- Contatti e Social Media --- */
+  .contact-info {
+    margin-bottom: 25px;
+    .label {
+      font-weight: bold;
+      min-width: 70px; /* Allinea i due punti */
+      display: inline-block;
+    }
+    p {
+      display: flex;
+      span {
+        display: inline-block;
+      }
+    }
+  }
 
-.separator {
-  border: none;
-  height: 1px;
-  background-color: $divider-color;
-  margin: 25px 0;
-}
+  .social-icons {
+    display: flex;
+    gap: 15px;
 
-.copyright {
-  text-align: center;
-  font-size: 1rem;
-  color: white;
-  font-weight: 400;
+    @media (min-width: 768px) and (max-width: 1023px) {
+      justify-content: center; /* Dispone le colonne in fila su schermi più larghi */
+    }
 
-  strong {
-    color: $text-color;
-    font-weight: 500;
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 35px;
+      height: 35px;
+      background-color: white;
+      border-radius: 50%;
+      font-size: 1.2em;
+
+      /* Nota: Qui dovrai sostituire il testo del placeholder  con la tua libreria di icone (es. Font Awesome, o SVG) */
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: $light-blue;
+        &:hover img {
+          content: url('/assets/icons/instagram_hover.svg'); // Cambia il percorso per ogni icona
+        }
+
+        &.facebook:hover img {
+          content: url('/assets/icons/facebook_hover.svg');
+        }
+
+        &.twitter:hover img {
+          content: url('/assets/icons/linkedin_hover.svg');
+        }
+
+        &.tiktok:hover img {
+          content: url('/assets/icons/tiktok_hover.svg');
+        }
+      }
+    }
+  }
+
+  /* --- Copyright e Separatore --- */
+  .footer-bottom {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .separator {
+    border: none;
+    height: 1px;
+    background-color: $divider-color;
+    margin: 25px 0;
+  }
+
+  .copyright {
+    text-align: center;
+    font-size: 1rem;
+    color: white;
+    font-weight: 400;
+
+    strong {
+      color: $text-color;
+      font-weight: 500;
+    }
   }
 }

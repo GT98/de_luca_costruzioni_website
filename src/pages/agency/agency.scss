@@ -1,6 +1,32 @@
 .agency-container {
-  padding: 0 37px 47px 37px;
+  display: flex;
+  flex-direction: column;
+  padding: 46px 84px 47px 37px;
+
+  @media (min-width: 768px) {
+    padding: 46px 129px 47px 37px;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 129px 129px 147px 129px;
+    gap: 80px;
+    flex-direction: row;
+  }
+
+  @media (min-width: 1440px) {
+    padding: 120px 129px 147px 183px;
+    gap: 140px;
+    flex-direction: row;
+  }
+
   .text-container {
+    @media (min-width: 1024px) {
+      max-width: 378px;
+    }
+    @media (min-width: 1440px) {
+      max-width: 588px;
+    }
+
     .title {
       color: #19669f;
       font-family: 'Outfit';
@@ -26,7 +52,7 @@
       font-size: 14px;
       line-height: 20px;
       margin-bottom: 35px;
-      color: #0A0200;
+      color: #0a0200;
     }
   }
 }

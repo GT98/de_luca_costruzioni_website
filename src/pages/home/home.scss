@@ -15,7 +15,20 @@
     position: absolute;
     bottom: 3rem;
     width: 100%;
-    padding: 0 25px;
+    padding: 0 24px;
+
+    @media (min-width: 768px) {
+      padding: 0px 37px;
+    }
+
+    @media (min-width: 1024px) {
+      padding: 60px 61px;
+    }
+
+    @media (min-width: 1441px) {
+      padding: 60px 61px;
+    }
+
     color: white;
     h1 {
       font-size: 48.64px;
@@ -33,7 +46,7 @@
         gap: 1rem;
       }
       @media (max-width: 439px) {
-        .hero_buttons { 
+        .hero_buttons {
           gap: 0.8rem;
         }
       }
