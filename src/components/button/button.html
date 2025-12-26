@@ -1,8 +1,14 @@
-<button [routerLink]="'/' + navigateTo()" class="custom-button" [ngClass]="kind()" [style.font-size.rem]="fontSize()"
+<button 
+    [routerLink]="navigateTo() ? ('/' + navigateTo()) : null"
+    [routerLinkActive]="navigateTo() ? 'active' : []"
+    (click)="navigateToTag() ? scrollToTag() : null"
+    class="custom-button" 
+    [ngClass]="kind()" 
+    [style.font-size.rem]="fontSize()"
     [style.padding-right.rem]="showIcon() ? kind() === 'ghost' ? 0.28125 : 0.34375 : 1.3875">
     <span>{{text()}}</span>
     @if(showIcon()){
-    <div class="arrow-icon">
+    <div class="arrow-icon" [ngClass]="iconDirection()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right">
             <line x1="5" y1="12" x2="19" y2="12"></line>

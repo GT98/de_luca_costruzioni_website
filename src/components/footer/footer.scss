@@ -7,7 +7,7 @@ $divider-color: #ffffff66;
   background-color: $dark-bg;
   color: $text-color;
   font-family: 'Outfit', sans-serif;
-  padding: 70px 1rem 40px 1rem;
+  padding: 70px 37px 104px 74px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -50,7 +50,7 @@ $divider-color: #ffffff66;
   padding-bottom: 100px;
   box-sizing: border-box;
 
-  @media (min-width: 768px) and (max-width: 1023px) {
+  @media (min-width: 440px) {
     text-align: center;
   }
 
@@ -77,12 +77,12 @@ $divider-color: #ffffff66;
     flex-basis: 25%; /* Alloca un po' più di spazio per il logo */
     align-items: flex-start;
 
-    @media (min-width: 768px) and (max-width: 1023px) {
+    @media (min-width: 440px) {
       align-items: center; /* Dispone le colonne in fila su schermi più larghi */
     }
 
     img {
-      width: 270px; /* Larghezza del logo */
+      width: 255px; /* Larghezza del logo */
 
       @media (min-width: 1024px) {
         
@@ -166,7 +166,7 @@ $divider-color: #ffffff66;
     display: flex;
     gap: 15px;
 
-    @media (min-width: 768px) and (max-width: 1023px) {
+    @media (min-width: 440px){
       justify-content: center; /* Dispone le colonne in fila su schermi più larghi */
     }
 

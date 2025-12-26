@@ -1,5 +1,4 @@
 <app-hero-banner [title]="'Preventivo gratuito'"></app-hero-banner>
-<app-img-section-header></app-img-section-header>
 <div class="free-estimate-container">
     <div class="text-container">
         <div class="title">
@@ -23,10 +22,17 @@
             aliquet facilisis sit molestie. Viverra euismod ornare volutpat nulla proin sem libero quis pretium. Sed
             dignissim tortor eget nibh ac feugiat enim a.
         </div>
+        <div class="buttons">
+            <app-button [text]="'Preventivo gratuito'" [navigateToTag]="'free_estimate_form'" [showIcon]="true"
+                [iconDirection]="'down'"></app-button>
+            <app-button [text]="'Azienda'" [navigateTo]="'/servizi'" [kind]="'tertiary'"
+                [navigateTo]="'agency'"></app-button>
+        </div>
     </div>
+    <app-img-section-header class="only-mobile"></app-img-section-header>
 </div>
 <div>
     <app-contact-info [currentPage]="'free_estimate'"></app-contact-info>
 </div>
-<app-form-free-estimate></app-form-free-estimate>
+<app-form-free-estimate id="free_estimate_form"></app-form-free-estimate>
 <app-follow-on></app-follow-on>

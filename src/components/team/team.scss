@@ -1,5 +1,10 @@
 .team-section {
   padding: 80px 37px;
+
+  @media (min-width: 768px) {
+    padding: 80px 50px;
+  }
+
   background-color: #d9d9d966;
 
   @media (max-width: 768px) {
@@ -97,19 +102,6 @@
 .team-member-card {
   overflow: hidden;
   transition: all 0.3s ease;
-
-  &:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    transform: translateY(-5px);
-
-    .member-image {
-      transform: scale(1.05);
-    }
-
-    .member-overlay {
-      opacity: 1;
-    }
-  }
 }
 
 .member-image-wrapper {
@@ -161,10 +153,6 @@
   color: white;
   transform: translateY(20px);
   transition: transform 0.4s ease;
-
-  .team-member-card:hover & {
-    transform: translateY(0);
-  }
 }
 
 .member-bio {
@@ -286,6 +274,11 @@ $dark-background: #333; /* Sfondo scuro nella parte inferiore */
   left: 0;
   width: 100%;
   padding: 0 37px 47px 37px; /* Padding dal basso e dai lati */
+
+  @media (min-width: 768px) {
+    padding: 0 50px 60px 50px;
+  }
+  
   box-sizing: border-box;
   z-index: 2; /* Sopra l'overlay */
   color: $text-color-light;
@@ -342,6 +335,6 @@ $dark-background: #333; /* Sfondo scuro nella parte inferiore */
   }
 
   .hero-description {
-    font-size: 14px;
+    font-size: 1rem;
   }
 }

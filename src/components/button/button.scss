@@ -51,6 +51,15 @@
     height: 2.125rem;
     border-radius: 50%; /* Rende il div un cerchio */
     background-color: white; /* Colore bianco del cerchio */
+
+    &.right {
+      transform: rotate(0deg);
+    }
+
+    &.down {
+      transform: rotate(90deg);
+    }
+
     /* Stile per l'SVG della freccia all'interno del cerchio */
     svg {
       width: 15px; /* Dimensione dell'icona della freccia */

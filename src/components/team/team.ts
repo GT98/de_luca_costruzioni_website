@@ -21,31 +21,31 @@ export class Team {
   teamMembers: TeamMember[] = [
     {
       id: 1,
-      name: 'Marco Rossi',
+      name: 'Pasquale De Luca',
       role: 'CEO & Founder',
       image: 'assets/images/team/team-1.jpg',
-      bio: 'Esperto in strategia aziendale con 15 anni di esperienza'
+      bio: 'Titolare e fondatore con oltre 20 anni di esperienza nel settore'
     },
     {
       id: 2,
-      name: 'Laura Bianchi',
+      name: 'Grazia Spagnoli',
       role: 'Project Manager',
       image: 'assets/images/team/team-1.jpg',
-      bio: 'Specializzata nella gestione di progetti complessi'
+      bio: 'Volto principale dell\'azienda sui social network'
     },
     {
       id: 3,
-      name: 'Giuseppe Verdi',
+      name: 'Nunzia Verdi',
       role: 'Lead Developer',
       image: 'assets/images/team/team-1.jpg',
-      bio: 'Sviluppatore full-stack con passione per l\'innovazione'
+      bio: 'Amministratrice interna e contabile esperta'
     },
     {
       id: 4,
-      name: 'Sofia Romano',
+      name: 'Agostino Toti',
       role: 'UX/UI Designer',
       image: 'assets/images/team/team-1.jpg',
-      bio: 'Designer creativa con focus sull\'esperienza utente'
+      bio: 'Geometra con esperienza in progettazione e design'
     },
     {
       id: 5,
