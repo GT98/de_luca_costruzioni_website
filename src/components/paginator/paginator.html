@@ -1,0 +1,52 @@
+@if (totalPages > 1) {
+  <nav class="paginator" role="navigation" aria-label="Pagination">
+    <div class="paginator-container">
+
+      <!-- Pulsante Precedente -->
+      <button
+        class="paginator-btn paginator-btn-prev"
+        [disabled]="!hasPreviousPage"
+        (click)="previousPage()"
+        aria-label="Pagina precedente">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <!-- Numeri di Pagina -->
+      <div class="paginator-pages">
+        @for (page of pages; track page; let i = $index) {
+          @if (i > 0 && pages[i - 1] !== page - 1) {
+            <span class="paginator-ellipsis">...</span>
+          }
+
+          <button
+            class="paginator-btn paginator-btn-page"
+            [class.active]="page === currentPage"
+            (click)="goToPage(page)"
+            [attr.aria-label]="'Pagina ' + page"
+            [attr.aria-current]="page === currentPage ? 'page' : null">
+            {{ page }}
+          </button>
+        }
+      </div>
+
+      <!-- Pulsante Successivo -->
+      <button
+        class="paginator-btn paginator-btn-next"
+        [disabled]="!hasNextPage"
+        (click)="nextPage()"
+        aria-label="Pagina successiva">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+
+    </div>
+
+    <!-- Informazioni sugli elementi visualizzati -->
+    <div class="paginator-info">
+      Visualizzati {{ (currentPage - 1) * itemsPerPage + 1 }} - {{ minValue }} di {{ totalItems }} elementi
+    </div>
+  </nav>
+}

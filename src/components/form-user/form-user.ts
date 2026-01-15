@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -5,13 +6,15 @@ import { LeadService } from '../../services/lead';
 
 @Component({
   selector: 'app-form-user',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './form-user.html',
   styleUrl: './form-user.scss',
 })
 export class FormUser implements OnInit {
 
   contactForm!: FormGroup;
+  isSubmitted = false;
+  isSubmitting = false;
   private n8nWebhookUrl = 'http://localhost:5678/webhook/form-webhook'; // <<< INSERISCI QUI IL TUO VERO URL N8N
   leadService = inject(LeadService);
 
@@ -39,34 +42,19 @@ export class FormUser implements OnInit {
   onSubmit(): void {
     if (this.contactForm.valid) {
       console.log('Form Inviato:', this.contactForm.value);
-
-      // 1. Invio dei dati al Webhook n8n
-      /*this.http.post(this.n8nWebhookUrl, this.contactForm.value)
-        .subscribe({
-          next: (response: any) => {
-            console.log('Invio a n8n riuscito', response);
-            alert('La tua richiesta è stata inviata con successo! Verrai ricontattato presto.');
-            this.contactForm.reset(); // Resetta il form dopo l'invio
-            // Correggi il valore booleano per la checkbox dopo il reset
-            this.contactForm.get('privacy_accedepted')?.setValue(false);
-          },
-          error: (error: any) => {
-            console.error('Errore nell\'invio a n8n', error);
-            alert('Si è verificato un errore durante l\'invio. Riprova.');
-          }
-        });*/
+      this.isSubmitting = true;
 
       this.leadService.saveContactLead(this.contactForm.value)
         .then((data) => {
           console.log('Lead salvato con successo', data);
-          alert('La tua richiesta è stata inviata con successo! Verrai ricontattato presto.');
-          this.contactForm.reset(); // Resetta il form dopo l'invio
-          // Correggi il valore booleano per la checkbox dopo il reset
-          this.contactForm.get('privacy_accepted')?.setValue(false);
+          this.isSubmitted = true;
+          this.isSubmitting = false;
+          this.contactForm.reset();
         })
         .catch((error) => {
           console.error('Errore nel salvataggio del lead', error);
           alert('Si è verificato un errore durante l\'invio. Riprova.');
+          this.isSubmitting = false;
         });
 
     } else {
@@ -74,6 +62,13 @@ export class FormUser implements OnInit {
       this.contactForm.markAllAsTouched();
       alert('Per favore, compila tutti i campi obbligatori correttamente.');
     }
+  }
+
+  // Metodo per tornare al form
+  resetForm(): void {
+    this.isSubmitted = false;
+    this.contactForm.reset();
+    this.contactForm.get('privacy_accepted')?.setValue(false);
   }
 
 }

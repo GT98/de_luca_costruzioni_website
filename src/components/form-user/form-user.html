@@ -1,37 +1,67 @@
 <section class="user-form-section">
-  
+
     <div class="form-wrapper">
-      
-      <div class="header-text">
-        <h2>CERCHI INFORMAZIONI ?</h2>
-        <p>Compila il form sottostante per richiedere informazioni. Ti contatteremo al più presto.</p>
-      </div>
-  
-      <form class="user-form" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-        
-        <input type="text" placeholder="Nome*" formControlName="name" required> 
-        
-        <input type="text" placeholder="Cognome*" formControlName="surname" required>
-        
-        <input type="tel" placeholder="Telefono*" formControlName="mobile" required>
-        
-        <input type="text" placeholder="Indirizzo" formControlName="address">
-        
-        <input type="email" placeholder="E-mail*" formControlName="email" required>
-        
-        <input type="text" placeholder="Tipologia di servizio" formControlName="service_type">
-  
-        <textarea placeholder="Messaggio" formControlName="message"></textarea>
-  
-        <div class="privacy-checkbox">
-          <input type="checkbox" id="privacy" formControlName="privacy_accepted" required>
-          <label for="privacy">
-            Dichiaro di aver letto, compreso e di accettare pienamente l'Informativa sulla Privacy e autorizzo il trattamento dei miei dati personali, come indicato nell'Informativa.*
-          </label>
+
+      <!-- Sezione Form -->
+      @if (!isSubmitted) {
+        <div class="form-container">
+          <div class="header-text">
+            <h2>CERCHI INFORMAZIONI ?</h2>
+            <p>Compila il form sottostante per richiedere informazioni. Ti contatteremo al più presto.</p>
+          </div>
+
+          <form class="user-form" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+
+            <input type="text" placeholder="Nome*" formControlName="name" required>
+
+            <input type="text" placeholder="Cognome*" formControlName="surname" required>
+
+            <input type="tel" placeholder="Telefono*" formControlName="mobile" required>
+
+            <input type="text" placeholder="Indirizzo" formControlName="address">
+
+            <input type="email" placeholder="E-mail*" formControlName="email" required>
+
+            <input type="text" placeholder="Tipologia di servizio" formControlName="service_type">
+
+            <textarea placeholder="Messaggio" formControlName="message"></textarea>
+
+            <div class="privacy-checkbox">
+              <input type="checkbox" id="privacy" formControlName="privacy_accepted" required>
+              <label for="privacy">
+                Dichiaro di aver letto, compreso e di accettare pienamente l'Informativa sulla Privacy e autorizzo il trattamento dei miei dati personali, come indicato nell'Informativa.*
+              </label>
+            </div>
+
+            <button type="submit" class="submit-button" [disabled]="!contactForm.valid || isSubmitting">
+              {{ isSubmitting ? 'Invio in corso...' : 'Invia richiesta' }}
+            </button>
+
+          </form>
         </div>
-  
-        <button type="submit" class="submit-button" [disabled]="!contactForm.valid">Invia richiesta</button>
-        
-      </form>
+      }
+
+      <!-- Sezione Conferma Invio -->
+      @if (isSubmitted) {
+        <div class="success-container">
+          <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+          </div>
+
+          <div class="success-content">
+            <h2>RICHIESTA INVIATA CON SUCCESSO!</h2>
+            <p>Grazie per averci contattato. Abbiamo ricevuto la tua richiesta e ti ricontatteremo al più presto.</p>
+            <p class="success-subtitle">Il nostro team valuterà la tua richiesta e ti fornirà una risposta entro 24-48 ore.</p>
+          </div>
+
+          <button type="button" class="back-button" (click)="resetForm()">
+            Invia un'altra richiesta
+          </button>
+        </div>
+      }
+
     </div>
   </section>

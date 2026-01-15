@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FollowOn } from "../../components/follow-on/follow-on";
 import { HeroBanner } from "../../components/hero-banner/hero-banner";
+import { Paginator } from "../../components/paginator/paginator";
 import { RistrutturazioniService } from '../../services/ristrutturazioni';
 
 interface Project {
@@ -17,7 +18,7 @@ interface Project {
   standalone: true,
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.scss',
-  imports: [HeroBanner, FollowOn],
+  imports: [HeroBanner, FollowOn, Paginator],
 })
 export default class Portfolio {
 
@@ -30,6 +31,18 @@ export default class Portfolio {
   // Categoria attualmente selezionata (tutte)
   selectedCategory: number | null = 0;
 
+  // Paginazione
+  currentPage = signal(1);
+  itemsPerPage = 9; // 9 elementi per avere griglia 3x3 su desktop
+
+  // Calcola gli elementi paginati
+  paginatedRistrutturazioni = computed(() => {
+    const allItems = this.ristrutturazioni();
+    const start = (this.currentPage() - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return allItems.slice(start, end);
+  });
+
 
   async ngOnInit(): Promise<void> {
     this.ristrutturazioniService.getCategories();
@@ -39,7 +52,15 @@ export default class Portfolio {
   // Metodo per filtrare i progetti
   filterProjects(categoryId: number): void {
     this.selectedCategory = categoryId;
+    this.currentPage.set(1); // Reset alla prima pagina quando si filtra
     this.ristrutturazioniService.getRistrutturazioni(categoryId === 0 ? 0 : categoryId);
+  }
+
+  // Gestisce il cambio pagina
+  onPageChange(page: number): void {
+    this.currentPage.set(page);
+    // Scroll verso l'alto per mostrare i nuovi elementi
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   goToDetail(project: any): void {

@@ -9,6 +9,7 @@ $primary-color: #007bff;
 
 /* --- Intestazione --- */
 .header-text {
+  text-align: center;
   max-width: 800px;
   margin: 0 auto 50px auto;
 
@@ -28,6 +29,14 @@ $primary-color: #007bff;
 }
 
 .services_list {
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 15px;
+  }
+
   .services_item {
     overflow: hidden;
     font-weight: 300;
