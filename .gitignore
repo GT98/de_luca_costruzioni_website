@@ -45,3 +45,7 @@ Thumbs.db
 # Claude documentation
 claude.md
 *README.md
+*.md
+
+# MCP config
+.mcp.json
