@@ -2,41 +2,56 @@
 
   <div class="form-wrapper">
 
-    <div class="header-text">
-      <h2>Hai bisogno di un preventivo gratuito?</h2>
-      <p>Compila il form sottostante fornendo tutte le informazioni sull'appartamento che vuoi ristrutturare , un nostro
-        incaricato ti contatterà al più presto per fissare un sopralluogo gratuito e senza impegno.
-      </p>
-    </div>
+    <!-- Sezione Form -->
+    @if (!isSubmitted) {
+      <div class="form-container">
+        <div class="header-text">
+          <h2>Hai bisogno di un preventivo gratuito?</h2>
+          <p>Compila il form sottostante fornendo tutte le informazioni sull'appartamento che vuoi ristrutturare, un nostro
+            incaricato ti contatterà al più presto per fissare un sopralluogo gratuito e senza impegno.
+          </p>
+        </div>
 
-    <form class="free-estimate-form">
+        <form class="free-estimate-form" [formGroup]="estimateForm" (ngSubmit)="onSubmit()">
 
-      <input type="text" placeholder="Nome*" required>
-      <input type="text" placeholder="Cognome*" required>
-      <input type="tel" placeholder="Telefono*" required>
-      <input type="text" placeholder="Indirizzo*" required>
-      <input type="email" placeholder="Mq" required>
-      <input type="email" placeholder="Piano edificio" required>
-      <input type="text" placeholder="Tipologia di servizio">
-      <input type="text" placeholder="Budget">
-      <input type="email" placeholder="E-mail*" required>
+          <input type="text" placeholder="Nome*" formControlName="name" required>
+          <input type="text" placeholder="Cognome*" formControlName="surname" required>
+          <input type="tel" placeholder="Telefono*" formControlName="mobile" required>
+          <input type="text" placeholder="Indirizzo*" formControlName="address" required>
+          <input type="number" placeholder="Mq" formControlName="square_meters">
+          <input type="text" placeholder="Piano edificio" formControlName="floor">
+          <input type="text" placeholder="Tipologia di servizio" formControlName="service_type">
+          <input type="text" placeholder="Budget" formControlName="budget">
+          <input type="email" placeholder="E-mail*" formControlName="email" required>
 
-      <!--<label style="grid-column: 1 / 3;" for="documents" class="document-label">Documenti</label>
-      <input type="file" id="documents" class="file-input">
-      <div class="file-placeholder">Carica Documenti</div>-->
+          <textarea placeholder="Note" formControlName="notes"></textarea>
 
-      <textarea placeholder="Note"></textarea>
+          <div class="privacy-checkbox">
+            <input type="checkbox" id="privacy-estimate" formControlName="privacy_accepted" required>
+            <label for="privacy-estimate">
+              Dichiaro di aver letto, compreso e di accettare pienamente l'Informativa sulla Privacy e autorizzo il
+              trattamento dei miei dati personali, come indicato nell'Informativa.*
+            </label>
+          </div>
 
-      <div class="privacy-checkbox">
-        <input type="checkbox" id="privacy" required>
-        <label for="privacy">
-          Dichiaro di aver letto, compreso e di accettare pienamente l'Informativa sulla Privacy e autorizzo il
-          trattamento dei miei dati personali, come indicato nell'Informativa.*
-        </label>
+          <button type="submit" class="submit-button" [disabled]="!estimateForm.valid || isSubmitting">
+            {{ isSubmitting ? 'Invio in corso...' : 'Invia richiesta' }}
+          </button>
+
+        </form>
       </div>
+    }
 
-      <button type="submit" class="submit-button">Invia richiesta</button>
+    <!-- Sezione Conferma Invio -->
+    @if (isSubmitted) {
+      <app-form-success-message
+        title="RICHIESTA PREVENTIVO INVIATA!"
+        message="Grazie per la tua richiesta di preventivo gratuito. Abbiamo ricevuto tutte le informazioni."
+        subtitle="Un nostro incaricato ti contatterà entro 24-48 ore per fissare un sopralluogo gratuito e senza impegno."
+        resetButtonText="Richiedi un altro preventivo"
+        (reset)="resetForm()">
+      </app-form-success-message>
+    }
 
-    </form>
   </div>
 </section>

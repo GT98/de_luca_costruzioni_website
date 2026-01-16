@@ -1,42 +1,57 @@
 <section class="supplier-form-section">
-  
-    <div class="form-wrapper">
-      
-      <div class="header-text">
-        <h2>VORRESTI COLLABORARE CON NOI ?</h2>
-        <p>
-          Compila il form sottostante per inviarci la tua richiesta di collaborazione. Saremo lieti di valutare la tua
-          proposta e di metterci in contatto con te al più presto.
-        </p>
-      </div>
-  
-      <form class="supplier-form">
-        
-        <input type="text" placeholder="Nome*" required>
-        <input type="text" placeholder="Cognome*" required>
-        <input type="tel" placeholder="Telefono*" required>
-        <input type="text" placeholder="Azienda*" required>
-        <input type="text" placeholder="Ruolo">
-        <input type="text" placeholder="Indirizzo">
-        <input type="email" placeholder="E-mail*" required>
-        <input type="text" placeholder="Pec*">
-        <input type="text" placeholder="Tipologia di servizio">
-  
-        <!--<label style="grid-column: 1 / 3;" for="documents" class="document-label">Documenti</label>
-        <input type="file" id="documents" class="file-input">
-        <div class="file-placeholder">Carica Documenti</div>-->
-  
-        <textarea placeholder="Note"></textarea>
-  
-        <div class="privacy-checkbox">
-          <input type="checkbox" id="privacy" required>
-          <label for="privacy">
-            Dichiaro di aver letto, compreso e di accettare pienamente l'Informativa sulla Privacy e autorizzo il trattamento dei miei dati personali, come indicato nell'Informativa.*
-          </label>
+
+  <div class="form-wrapper">
+
+    <!-- Sezione Form -->
+    @if (!isSubmitted) {
+      <div class="form-container">
+        <div class="header-text">
+          <h2>VORRESTI COLLABORARE CON NOI ?</h2>
+          <p>
+            Compila il form sottostante per inviarci la tua richiesta di collaborazione. Saremo lieti di valutare la tua
+            proposta e di metterci in contatto con te al più presto.
+          </p>
         </div>
-  
-        <button type="submit" class="submit-button">Invia richiesta</button>
-        
-      </form>
-    </div>
-  </section>
+
+        <form class="supplier-form" [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
+
+          <input type="text" placeholder="Nome*" formControlName="name" required>
+          <input type="text" placeholder="Cognome*" formControlName="surname" required>
+          <input type="tel" placeholder="Telefono*" formControlName="mobile" required>
+          <input type="text" placeholder="Azienda*" formControlName="company" required>
+          <input type="text" placeholder="Ruolo" formControlName="role">
+          <input type="text" placeholder="Indirizzo" formControlName="address">
+          <input type="email" placeholder="E-mail*" formControlName="email" required>
+          <input type="email" placeholder="Pec" formControlName="pec">
+          <input type="text" placeholder="Tipologia di servizio" formControlName="service_type">
+
+          <textarea placeholder="Note" formControlName="notes"></textarea>
+
+          <div class="privacy-checkbox">
+            <input type="checkbox" id="privacy-supplier" formControlName="privacy_accepted" required>
+            <label for="privacy-supplier">
+              Dichiaro di aver letto, compreso e di accettare pienamente l'Informativa sulla Privacy e autorizzo il trattamento dei miei dati personali, come indicato nell'Informativa.*
+            </label>
+          </div>
+
+          <button type="submit" class="submit-button" [disabled]="!supplierForm.valid || isSubmitting">
+            {{ isSubmitting ? 'Invio in corso...' : 'Invia richiesta' }}
+          </button>
+
+        </form>
+      </div>
+    }
+
+    <!-- Sezione Conferma Invio -->
+    @if (isSubmitted) {
+      <app-form-success-message
+        title="RICHIESTA DI COLLABORAZIONE INVIATA!"
+        message="Grazie per il tuo interesse a collaborare con noi. Abbiamo ricevuto la tua richiesta."
+        subtitle="Il nostro team valuterà la tua proposta e ti contatterà entro 48-72 ore per discutere le opportunità di collaborazione."
+        resetButtonText="Invia un'altra richiesta"
+        (reset)="resetForm()">
+      </app-form-success-message>
+    }
+
+  </div>
+</section>

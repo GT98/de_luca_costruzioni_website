@@ -6,13 +6,76 @@
         </div>
         <div class="stats">
             <div class="stat-badge">
-                <span class="stat-value">{{ leads().length }}</span>
+                <span class="stat-value">{{ allLeads().length }}</span>
                 <span class="stat-label">Totali</span>
             </div>
             <div class="stat-badge unread">
                 <span class="stat-value">{{ getUnreadCount() }}</span>
                 <span class="stat-label">Non letti</span>
             </div>
+            <div class="stat-badge">
+                <span class="stat-value">{{ filteredLeads().length }}</span>
+                <span class="stat-label">Filtrati</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <div class="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" placeholder="Cerca per nome, email, telefono..."
+                [ngModel]="searchTerm()"
+                (ngModelChange)="searchTerm.set($event)" />
+        </div>
+
+        <div class="filters-row">
+            <div class="filter-group">
+                <label>Tipo</label>
+                <select [ngModel]="filterType()" (ngModelChange)="filterType.set($event)">
+                    <option value="all">Tutti</option>
+                    <option value="contact">Contatto</option>
+                    <option value="supplier">Fornitore</option>
+                    <option value="free_estimate">Preventivo</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Stato</label>
+                <select [ngModel]="filterStatus()" (ngModelChange)="filterStatus.set($event)">
+                    <option value="all">Tutti</option>
+                    <option value="nuovo">Nuovo</option>
+                    <option value="contattato_qualifica">Contattato</option>
+                    <option value="sopralluogo_fissato">Sopralluogo</option>
+                    <option value="preventivo_in_bozza">Preventivo</option>
+                    <option value="in_negoziazione">Negoziazione</option>
+                    <option value="chiuso_vinto">Vinto</option>
+                    <option value="chiuso_perso">Perso</option>
+                    <option value="non_interessato">Non interessato</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Lettura</label>
+                <select [ngModel]="filterRead()" (ngModelChange)="filterRead.set($event)">
+                    <option value="all">Tutti</option>
+                    <option value="unread">Non letti</option>
+                    <option value="read">Letti</option>
+                </select>
+            </div>
+
+            <button class="btn-clear-filters" (click)="clearFilters()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                Pulisci filtri
+            </button>
         </div>
     </div>
 
@@ -21,7 +84,7 @@
         <p>Caricamento lead in corso...</p>
     </div>
 
-    <div *ngIf="!loading() && leads().length === 0" class="empty-state">
+    <div *ngIf="!loading() && allLeads().length === 0" class="empty-state">
         <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -30,8 +93,18 @@
         <p>Quando riceverai richieste di contatto, appariranno qui</p>
     </div>
 
-    <div *ngIf="!loading() && leads().length > 0" class="leads-list">
-        <div *ngFor="let lead of leads()" class="lead-card" [class.unread]="!lead.read" (click)="viewLead(lead)">
+    <div *ngIf="!loading() && filteredLeads().length === 0 && allLeads().length > 0" class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <h2>Nessun risultato trovato</h2>
+        <p>Prova a modificare i filtri di ricerca</p>
+    </div>
+
+    <div *ngIf="!loading() && paginatedLeads().length > 0" class="leads-list">
+        <div *ngFor="let lead of paginatedLeads()" class="lead-card" [class.unread]="!lead.read" (click)="viewLead(lead)">
             <div class="lead-header">
                 <div class="lead-info">
                     <div class="lead-name">
@@ -40,20 +113,25 @@
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                        <span>{{ lead.name || 'Nome non disponibile' }}</span>
+                        <span>{{ lead.name || 'Nome non disponibile' }} {{ lead.surname || '' }}</span>
                     </div>
-                    <div class="lead-date">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        {{ lead.created_at | date:'dd/MM/yyyy HH:mm' }}
+                    <div class="lead-badges">
+                        <span class="type-badge" [class.contact]="lead.lead_type === 'contact'"
+                            [class.supplier]="lead.lead_type === 'supplier'"
+                            [class.free-estimate]="lead.lead_type === 'free_estimate'">
+                            {{ getLeadTypeLabel(lead.lead_type) }}
+                        </span>
+                        <span *ngIf="!lead.read" class="status-badge new">Nuovo</span>
+                        <span *ngIf="lead.read" class="status-badge read">Letto</span>
                     </div>
                 </div>
-                <div class="lead-status">
-                    <span *ngIf="!lead.read" class="status-badge new">Nuovo</span>
-                    <span *ngIf="lead.read" class="status-badge read">Letto</span>
+                <div class="lead-date">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    {{ lead.created_at | date:'dd/MM/yyyy HH:mm' }}
                 </div>
             </div>
 
@@ -83,8 +161,48 @@
                     </div>
                 </div>
 
-                <div class="lead-message">
-                    <p>{{ truncateMessage(lead.message || '') }}</p>
+                <!-- Contact Lead - Show message -->
+                <div *ngIf="lead.lead_type === 'contact'" class="lead-details">
+                    <div class="detail-item" *ngIf="$any(lead).message">
+                        <strong>Messaggio:</strong>
+                        <p>{{ truncateMessage($any(lead).message || '') }}</p>
+                    </div>
+                </div>
+
+                <!-- Supplier Lead - Show company, role, notes -->
+                <div *ngIf="lead.lead_type === 'supplier'" class="lead-details">
+                    <div class="detail-item" *ngIf="$any(lead).company">
+                        <strong>Azienda:</strong>
+                        <span>{{ $any(lead).company }}</span>
+                    </div>
+                    <div class="detail-item" *ngIf="$any(lead).role">
+                        <strong>Ruolo:</strong>
+                        <span>{{ $any(lead).role }}</span>
+                    </div>
+                    <div class="detail-item" *ngIf="$any(lead).notes">
+                        <strong>Note:</strong>
+                        <p>{{ truncateMessage($any(lead).notes || '') }}</p>
+                    </div>
+                </div>
+
+                <!-- Free Estimate Lead - Show square meters, floor, budget, notes -->
+                <div *ngIf="lead.lead_type === 'free_estimate'" class="lead-details">
+                    <div class="detail-item" *ngIf="$any(lead).square_meters">
+                        <strong>Metri quadri:</strong>
+                        <span>{{ $any(lead).square_meters }} m²</span>
+                    </div>
+                    <div class="detail-item" *ngIf="$any(lead).floor">
+                        <strong>Piano:</strong>
+                        <span>{{ $any(lead).floor }}</span>
+                    </div>
+                    <div class="detail-item" *ngIf="$any(lead).budget">
+                        <strong>Budget:</strong>
+                        <span>{{ $any(lead).budget }}</span>
+                    </div>
+                    <div class="detail-item" *ngIf="$any(lead).notes">
+                        <strong>Note:</strong>
+                        <p>{{ truncateMessage($any(lead).notes || '') }}</p>
+                    </div>
                 </div>
             </div>
 
@@ -120,11 +238,27 @@
         </div>
     </div>
 
+    <!-- Paginator -->
+    <app-paginator
+        *ngIf="!loading() && filteredLeads().length > itemsPerPage"
+        [totalItems]="filteredLeads().length"
+        [itemsPerPage]="itemsPerPage"
+        [currentPage]="currentPage()"
+        (pageChange)="onPageChange($event)">
+    </app-paginator>
+
     <!-- Modal Dettaglio -->
     <div *ngIf="selectedLead" class="modal-overlay" (click)="closeModal()">
         <div class="modal-content" (click)="$event.stopPropagation()">
             <div class="modal-header">
-                <h2>Dettaglio Lead</h2>
+                <div class="modal-title-wrapper">
+                    <h2>Dettaglio Lead</h2>
+                    <span class="type-badge" [class.contact]="selectedLead.lead_type === 'contact'"
+                        [class.supplier]="selectedLead.lead_type === 'supplier'"
+                        [class.free-estimate]="selectedLead.lead_type === 'free_estimate'">
+                        {{ getLeadTypeLabel(selectedLead.lead_type) }}
+                    </span>
+                </div>
                 <button class="btn-close" (click)="closeModal()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -136,8 +270,8 @@
 
             <div class="modal-body">
                 <div class="detail-section">
-                    <label>Nome</label>
-                    <p>{{ selectedLead.name || '-' }}</p>
+                    <label>Nome Completo</label>
+                    <p>{{ selectedLead.name || '-' }} {{ selectedLead.surname || '' }}</p>
                 </div>
 
                 <div class="detail-section">
@@ -158,17 +292,77 @@
                     </p>
                 </div>
 
+                <div class="detail-section" *ngIf="selectedLead.address">
+                    <label>Indirizzo</label>
+                    <p>{{ selectedLead.address }}</p>
+                </div>
+
+                <div class="detail-section" *ngIf="selectedLead.service_type">
+                    <label>Tipo di Servizio</label>
+                    <p>{{ selectedLead.service_type }}</p>
+                </div>
+
                 <div class="detail-section">
                     <label>Data ricezione</label>
                     <p>{{ selectedLead.created_at | date:'dd/MM/yyyy - HH:mm:ss' }}</p>
                 </div>
 
-                <div class="detail-section full">
+                <div class="detail-section" *ngIf="selectedLead.lead_status">
+                    <label>Stato</label>
+                    <p>{{ getLeadStatusLabel(selectedLead.lead_status) }}</p>
+                </div>
+
+                <!-- Contact Lead Specific Fields -->
+                <div *ngIf="selectedLead.lead_type === 'contact'" class="detail-section full">
                     <label>Messaggio</label>
                     <div class="message-box">
-                        {{ selectedLead.message || '-' }}
+                        {{ $any(selectedLead).message || '-' }}
                     </div>
                 </div>
+
+                <!-- Supplier Lead Specific Fields -->
+                <ng-container *ngIf="selectedLead.lead_type === 'supplier'">
+                    <div class="detail-section" *ngIf="$any(selectedLead).company">
+                        <label>Azienda</label>
+                        <p>{{ $any(selectedLead).company }}</p>
+                    </div>
+                    <div class="detail-section" *ngIf="$any(selectedLead).role">
+                        <label>Ruolo</label>
+                        <p>{{ $any(selectedLead).role }}</p>
+                    </div>
+                    <div class="detail-section" *ngIf="$any(selectedLead).pec">
+                        <label>PEC</label>
+                        <p>{{ $any(selectedLead).pec }}</p>
+                    </div>
+                    <div class="detail-section full" *ngIf="$any(selectedLead).notes">
+                        <label>Note</label>
+                        <div class="message-box">
+                            {{ $any(selectedLead).notes }}
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Free Estimate Lead Specific Fields -->
+                <ng-container *ngIf="selectedLead.lead_type === 'free_estimate'">
+                    <div class="detail-section" *ngIf="$any(selectedLead).square_meters">
+                        <label>Metri Quadri</label>
+                        <p>{{ $any(selectedLead).square_meters }} m²</p>
+                    </div>
+                    <div class="detail-section" *ngIf="$any(selectedLead).floor">
+                        <label>Piano</label>
+                        <p>{{ $any(selectedLead).floor }}</p>
+                    </div>
+                    <div class="detail-section" *ngIf="$any(selectedLead).budget">
+                        <label>Budget</label>
+                        <p>{{ $any(selectedLead).budget }}</p>
+                    </div>
+                    <div class="detail-section full" *ngIf="$any(selectedLead).notes">
+                        <label>Note</label>
+                        <div class="message-box">
+                            {{ $any(selectedLead).notes }}
+                        </div>
+                    </div>
+                </ng-container>
             </div>
 
             <div class="modal-footer">

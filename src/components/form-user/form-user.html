@@ -43,24 +43,7 @@
 
       <!-- Sezione Conferma Invio -->
       @if (isSubmitted) {
-        <div class="success-container">
-          <div class="success-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="m9 12 2 2 4-4"></path>
-            </svg>
-          </div>
-
-          <div class="success-content">
-            <h2>RICHIESTA INVIATA CON SUCCESSO!</h2>
-            <p>Grazie per averci contattato. Abbiamo ricevuto la tua richiesta e ti ricontatteremo al più presto.</p>
-            <p class="success-subtitle">Il nostro team valuterà la tua richiesta e ti fornirà una risposta entro 24-48 ore.</p>
-          </div>
-
-          <button type="button" class="back-button" (click)="resetForm()">
-            Invia un'altra richiesta
-          </button>
-        </div>
+        <app-form-success-message (reset)="resetForm()"></app-form-success-message>
       }
 
     </div>
