@@ -135,6 +135,7 @@ export default class Ristrutturazioni {
 
     // --- 1. CARICAMENTO DEI FILE NELLO STORAGE ---
     console.log('Fase 1: Caricamento immagini...');
+
     const uploadedBeforeUrls = await this.uploadFiles(beforeFiles, 'before_images');
     const uploadedAfterUrls = await this.uploadFiles(afterFiles, 'after_images');
 
@@ -348,6 +349,10 @@ export default class Ristrutturazioni {
   // Funzione helper per caricare i file su Supabase Storage
   private async uploadFiles(files: File[], folderName: string): Promise<string[]> {
     const urls: string[] = [];
+
+    if(!files || files.length === 0) {
+      return urls; // Ritorna un array vuoto se non ci sono file da caricare
+    }
 
     for (const file of files) {
       // 2. Genera il percorso unico del file
