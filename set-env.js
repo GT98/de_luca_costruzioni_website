@@ -1,22 +1,21 @@
 const fs = require('fs');
 const path = require('path');
 
-const envDirectory = './src/environments';
-const targetPath = path.join(__dirname, './src/environments/environment.prod.ts');
+// Sovrascriviamo il file base che Angular usa di default
+const targetPath = path.join(__dirname, './src/environments/environment.ts');
 
-// Crea la cartella se non esiste
-if (!fs.existsSync(envDirectory)) {
-  fs.mkdirSync(envDirectory, { recursive: true });
-}
-
-// Genera il contenuto usando process.env (variabili di Vercel)
 const envConfigFile = `export const environment = {
   production: true,
-  supabaseUrl: '${process.env.SUPABASE_URL}',
-  supabaseAnonKey: '${process.env.SUPABASE_ANON_KEY}',
+  supabaseUrl: '${process.env.SUPABASE_URL || ''}',
+  supabaseAnonKey: '${process.env.SUPABASE_ANON_KEY || ''}',
   supabaseServiceRoleKey: ''
 };
 `;
 
-fs.writeFileSync(targetPath, envConfigFile);
-console.log(`✅ Generato environment.prod.ts per la build di Vercel`);
+try {
+    fs.writeFileSync(targetPath, envConfigFile);
+    console.log('✅ environment.ts sovrascritto con le variabili di Vercel');
+} catch (err) {
+    console.error('❌ Errore:', err);
+    process.exit(1);
+}
