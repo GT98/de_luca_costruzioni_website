@@ -49,3 +49,7 @@ claude.md
 
 # MCP config
 .mcp.json
+
+#Environment files
+src/environments/environment.prod.ts
+src/environments/environment.ts
