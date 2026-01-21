@@ -19,26 +19,26 @@ export class CompanyStatsComponent implements OnInit {
       id: 1,
       value: '+80',
       title: 'Progetti Completati',
-      description: 'Lorem ipsum dolor sit amet consectetur.'
+      description: 'Ristrutturazioni e costruzioni realizzate con successo sul territorio.'
     },
     {
       id: 2,
       value: '20K',
       title: 'Clienti Soddisfatti',
-      description: 'Lorem ipsum dolor sit amet consectetur.',
+      description: 'La fiducia dei nostri clienti è il nostro miglior risultato.',
       hasUnderline: true
     },
     {
       id: 3,
       value: '20%',
       title: 'Crescita Annuale',
-      description: 'Lorem ipsum dolor sit amet consectetur.'
+      description: 'Un trend positivo che testimonia la qualità del nostro lavoro.'
     },
     {
       id: 4,
       value: '+15',
       title: 'Anni di Esperienza',
-      description: 'Lorem ipsum dolor sit amet consectetur.'
+      description: 'Esperienza consolidata nel settore delle costruzioni e ristrutturazioni.'
     }
   ];
 

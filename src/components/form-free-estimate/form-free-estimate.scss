@@ -154,8 +154,13 @@ textarea {
   font-weight: 500;
   align-self: flex-start; /* Allinea il bottone a sinistra */
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: $text-color-dark;
     color: white;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 }
