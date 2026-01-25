@@ -6,5 +6,9 @@ export interface Ristrutturazione {
   description: string;
   beforeImages: ImageData[];
   afterImages: ImageData[];
+  beforePreviews?: ImageData[];
+  afterPreviews?: ImageData[];
+  beforeFiles?: File[];
+  afterFiles?: File[];
   created_at?: string;
 }

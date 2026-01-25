@@ -17,6 +17,10 @@ export const routes: Routes = [
             { path: 'dashboard', loadComponent: () => import('./pages/admin/dashboard/dashboard').then(m => m.default), canActivate: [authGuard], },
             { path: 'ristrutturazioni', loadComponent: () => import('./pages/admin/ristrutturazioni/ristrutturazioni').then(m => m.default), canActivate: [authGuard] },
             { path: 'lead', loadComponent: () => import('./pages/admin/lead/lead-list').then(m => m.default), canActivate: [authGuard] },
+            { path: 'fornitori', loadComponent: () => import('./pages/admin/fornitori/fornitori').then(m => m.default), canActivate: [authGuard] },
+            { path: 'materiali', loadComponent: () => import('./pages/admin/materiali/materiali').then(m => m.default), canActivate: [authGuard] },
+            { path: 'cantieri', loadComponent: () => import('./pages/admin/cantieri/cantieri').then(m => m.default), canActivate: [authGuard] },
+            { path: 'ddt', loadComponent: () => import('./pages/admin/ddt/ddt').then(m => m.default), canActivate: [authGuard] },
         ]
     },
 ]

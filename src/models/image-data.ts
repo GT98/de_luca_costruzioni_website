@@ -1,5 +1,10 @@
 export interface ImageData {
+    id?: number;
     url: string;
     isCoverImg: boolean;
-    file?: File; // Per le nuove immagini non ancora caricate
+    order_index?: number;
+    ristrutturazione_id?: number;
+    stato?: string;
+    created_at?: string;
+    file?: File;
 }

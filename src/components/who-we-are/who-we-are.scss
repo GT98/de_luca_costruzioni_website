@@ -24,6 +24,10 @@
       margin-bottom: 47px;
     }
 
+    .img-1 > img {
+      object-position: 55%;
+    }
+
     .img-1,
     .img-2 {
       width: calc(100% - 37px);
@@ -83,7 +87,7 @@
     .content {
       font-family: Outfit;
       font-weight: 300;
-      font-size: 14px;
+      font-size: 1rem;
       line-height: 20px;
       margin-bottom: 25px;
     }

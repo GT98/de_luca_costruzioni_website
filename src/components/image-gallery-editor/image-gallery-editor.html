@@ -1,0 +1,72 @@
+<div class="image-editor">
+  <label class="editor-label">{{ label }}</label>
+  <p class="hint">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    Trascina le immagini per riordinarle. La prima sarà l'immagine di copertina.
+  </p>
+
+  <div class="image-upload">
+    <input type="file" #fileInput multiple accept="image/*" (change)="onFileInputChange($event)"
+      style="display: none" />
+    <button type="button" class="btn-upload" (click)="fileInput.click()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="17 8 12 3 7 8"></polyline>
+        <line x1="12" y1="3" x2="12" y2="15"></line>
+      </svg>
+      {{ uploadButtonText }}
+    </button>
+
+    <div class="image-gallery">
+      <!-- Existing images -->
+      <div *ngFor="let img of images; let i = index" class="image-item" [class.is-cover]="i === 0" draggable="true"
+        (dragstart)="onDragStart($event, i)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event, i)" (dragend)="onDragEnd()">
+        <img [src]="img.url" alt="Immagine" />
+        <div class="drag-handle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </div>
+        <div *ngIf="i === 0" class="cover-indicator">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+            </polygon>
+          </svg>
+          Copertina
+        </div>
+        <button type="button" class="btn-remove-image" (click)="removeImage(i)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- New previews -->
+      <div *ngFor="let preview of newPreviews; let i = index" class="image-item new-image">
+        <img [src]="preview.url" alt="Nuova immagine" />
+        <div class="new-badge">Nuova</div>
+        <button type="button" class="btn-remove-image" (click)="removeImage(images.length + i)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

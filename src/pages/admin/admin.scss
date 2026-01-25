@@ -55,6 +55,20 @@
   color: white;
 }
 
+.nav-divider {
+  padding: 1rem 1.5rem 0.5rem;
+  margin-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+  }
+}
+
 .main-content {
   flex: 1;
   display: flex;
