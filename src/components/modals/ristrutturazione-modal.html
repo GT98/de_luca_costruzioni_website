@@ -1,0 +1,46 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ modalTitle }}</h2>
+      <button type="button" class="btn-close" (click)="close()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form class="form" (ngSubmit)="save()">
+        <div class="form-group">
+          <label for="title">Titolo *</label>
+          <input type="text" id="title" [(ngModel)]="title" name="title" required placeholder="Inserisci titolo" />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descrizione *</label>
+          <textarea id="description" [(ngModel)]="description" name="description" rows="4" required
+            placeholder="Inserisci descrizione"></textarea>
+        </div>
+
+        <app-image-gallery-editor label="Immagini Prima" [images]="beforeImages()" [newPreviews]="beforePreviews()"
+          uploadButtonText="Carica Immagini Prima" (onFilesSelected)="onBeforeFilesSelected($event)"
+          (onRemoveImage)="onRemoveBeforeImage($event)" (onReorder)="onReorderBeforeImages($event)">
+        </app-image-gallery-editor>
+
+        <app-image-gallery-editor label="Immagini Dopo" [images]="afterImages()" [newPreviews]="afterPreviews()"
+          uploadButtonText="Carica Immagini Dopo" (onFilesSelected)="onAfterFilesSelected($event)"
+          (onRemoveImage)="onRemoveAfterImage($event)" (onReorder)="onReorderAfterImages($event)">
+        </app-image-gallery-editor>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="close()">Annulla</button>
+          <button type="submit" class="btn-primary" [disabled]="saving()">
+            {{ saveButtonText }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

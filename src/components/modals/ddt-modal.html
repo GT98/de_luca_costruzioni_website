@@ -1,0 +1,164 @@
+@if (isOpen) {
+<div class="modal-overlay" (click)="close()">
+  <div class="modal-content modal-large" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ isEditMode ? 'Modifica DDT' : 'Nuovo DDT' }}</h2>
+      <button class="btn-close" (click)="close()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="ddtForm" (ngSubmit)="save()">
+      <div class="modal-body">
+        <div class="form-section">
+          <h3>Dati DDT</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="numero_ddt">Numero DDT *</label>
+              <input type="text" id="numero_ddt" formControlName="numero_ddt" class="form-control"
+                placeholder="es. DDT-2024-001">
+              @if (ddtForm.get('numero_ddt')?.invalid && ddtForm.get('numero_ddt')?.touched) {
+              <span class="error-message">Numero DDT obbligatorio</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="data_ddt">Data DDT *</label>
+              <input type="date" id="data_ddt" formControlName="data_ddt" class="form-control">
+              @if (ddtForm.get('data_ddt')?.invalid && ddtForm.get('data_ddt')?.touched) {
+              <span class="error-message">Data obbligatoria</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="tipo">Tipo *</label>
+              <select id="tipo" formControlName="tipo" class="form-control">
+                @for (tipoOpt of tipoOptions; track tipoOpt) {
+                <option [value]="tipoOpt">{{ getTipoLabel(tipoOpt) }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="fornitore_id">Fornitore</label>
+              <select id="fornitore_id" formControlName="fornitore_id" class="form-control">
+                <option [value]="null">-- Seleziona fornitore --</option>
+                @for (fornitore of fornitori; track fornitore.id) {
+                <option [value]="fornitore.id">{{ fornitore.nome }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="cantiere_id">Cantiere</label>
+              <select id="cantiere_id" formControlName="cantiere_id" class="form-control">
+                <option [value]="null">-- Seleziona cantiere --</option>
+                @for (cantiere of cantieri; track cantiere.id) {
+                <option [value]="cantiere.id">{{ cantiere.nome }} - {{ cantiere.citta }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="note">Note</label>
+              <textarea id="note" formControlName="note" class="form-control" rows="2"
+                placeholder="Note aggiuntive..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-header">
+            <h3>Materiali</h3>
+            <button type="button" class="btn-add" (click)="addMaterialeRow()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Aggiungi Materiale
+            </button>
+          </div>
+
+          <div class="materiali-table-container">
+            <table class="materiali-table">
+              <thead>
+                <tr>
+                  <th>Materiale *</th>
+                  <th>Quantita *</th>
+                  <th>U.M.</th>
+                  <th>Prezzo Unit.</th>
+                  <th>Subtotale</th>
+                  <th>Note</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody formArrayName="materiali">
+                @for (row of materialiArray.controls; track $index; let i = $index) {
+                <tr [formGroupName]="i">
+                  <td>
+                    <select formControlName="materiale_id" class="form-control" (change)="onMaterialeChange(i)">
+                      <option [value]="null">Seleziona...</option>
+                      @for (materiale of materiali; track materiale.id) {
+                      <option [value]="materiale.id">{{ materiale.nome }} {{ materiale.codice ? '(' +
+                        materiale.codice + ')' : '' }}</option>
+                      }
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number" formControlName="quantita" class="form-control input-small" step="0.01"
+                      min="0.01">
+                  </td>
+                  <td class="text-center">
+                    {{ getMaterialeUnita(row.get('materiale_id')?.value) }}
+                  </td>
+                  <td>
+                    <input type="number" formControlName="prezzo_unitario" class="form-control input-small" step="0.01"
+                      min="0" placeholder="0.00">
+                  </td>
+                  <td class="text-right">
+                    {{ getSubtotale(i) | number:'1.2-2' }} &euro;
+                  </td>
+                  <td>
+                    <input type="text" formControlName="note" class="form-control" placeholder="Note...">
+                  </td>
+                  <td>
+                    <button type="button" class="btn-remove" (click)="removeMaterialeRow(i)"
+                      [disabled]="materialiArray.length === 1" title="Rimuovi riga">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                        </path>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+                }
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4" class="text-right"><strong>Totale Complessivo:</strong></td>
+                  <td class="text-right"><strong>{{ getTotaleComplessivo() | number:'1.2-2' }} &euro;</strong></td>
+                  <td colspan="2"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="close()">Annulla</button>
+        <button type="submit" class="btn-primary" [disabled]="ddtForm.invalid || materialiArray.length === 0">
+          {{ isEditMode ? 'Aggiorna' : 'Salva DDT' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}

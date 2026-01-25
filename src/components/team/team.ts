@@ -19,47 +19,40 @@ interface TeamMember {
 })
 export class Team {
   teamMembers: TeamMember[] = [
-    {
+        {
       id: 1,
-      name: 'Pasquale De Luca',
-      role: 'CEO & Founder',
-      image: 'assets/images/team/team-1.jpg',
-      bio: 'Titolare e fondatore con oltre 20 anni di esperienza nel settore'
+      name: 'Giuseppe De Luca',
+      role: 'Founder',
+      image: 'assets/images/team/giuseppe.jpeg',
+      bio: 'Fondatore e geometra'
     },
     {
       id: 2,
-      name: 'Grazia Spagnoli',
-      role: 'Project Manager',
-      image: 'assets/images/team/team-1.jpg',
-      bio: 'Volto principale dell\'azienda sui social network'
+      name: 'Pasquale De Luca',
+      role: 'CEO',
+      image: 'assets/images/team/pasquale.png',
+      bio: 'Amministratore e responsabile del personale e del contatto con i clienti'
     },
     {
       id: 3,
-      name: 'Nunzia Verdi',
-      role: 'Lead Developer',
+      name: 'Grazia Spagnoli',
+      role: 'Project Manager',
+      image: 'assets/images/team/grazia.png',
+      bio: 'Volto principale dell\'azienda sui social e responsabile della comunicazione'
+    },
+    {
+      id: 4,
+      name: 'Nunzia Beneduce',
+      role: 'Amministratrice e contabile',
       image: 'assets/images/team/team-1.jpg',
       bio: 'Amministratrice interna e contabile esperta'
     },
     {
-      id: 4,
-      name: 'Agostino Toti',
-      role: 'UX/UI Designer',
-      image: 'assets/images/team/team-1.jpg',
-      bio: 'Geometra con esperienza in progettazione e design'
-    },
-    {
       id: 5,
-      name: 'Andrea Ferrari',
-      role: 'Marketing Director',
+      name: 'Agostino Toti',
+      role: 'Geometra',
       image: 'assets/images/team/team-1.jpg',
-      bio: 'Esperto di marketing digitale e brand strategy'
-    },
-    {
-      id: 6,
-      name: 'Chiara Russo',
-      role: 'Business Analyst',
-      image: 'assets/images/team/team-1.jpg',
-      bio: 'Analista con competenze in data-driven decision making'
+      bio: 'Geometra con esperienza e addetto a sopralluoghi e controllo qualità'
     }
   ];
 }

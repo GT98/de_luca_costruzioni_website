@@ -1,0 +1,41 @@
+<div class="list-container">
+  <div class="list-header">
+    <h1>Gestione Ristrutturazioni</h1>
+    <button class="btn-primary" (click)="createNew()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Nuova Ristrutturazione
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <span>Caricamento in corso...</span>
+  </div>
+
+  <div *ngIf="isEmpty" class="empty-state">
+    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+    </svg>
+    <h2>Nessuna ristrutturazione</h2>
+    <p>Inizia aggiungendo la tua prima ristrutturazione</p>
+    <button class="btn-primary" (click)="createNew()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Crea Prima Ristrutturazione
+    </button>
+  </div>
+
+  <div *ngIf="!loading && !isEmpty" class="cards-grid">
+    <app-ristrutturazione-card *ngFor="let r of ristrutturazioni" [ristrutturazione]="r"
+      (onView)="viewRistrutturazione($event)" (onDelete)="deleteRistrutturazione($event)">
+    </app-ristrutturazione-card>
+  </div>
+</div>
