@@ -1,24 +1,22 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { DdtService } from '../../../services/ddt.service';
-import { Fornitore, FornitoreInsert } from '../../../models/fornitore';
-import { FornitoreModal } from '../../../components/modals/fornitore-modal';
+import { Fornitore } from '../../../models/fornitore';
 
 @Component({
   selector: 'app-fornitori',
-  imports: [CommonModule, FornitoreModal],
+  imports: [CommonModule],
   templateUrl: './fornitori.html',
   styleUrl: './fornitori.scss',
 })
 export default class Fornitori implements OnInit {
   private ddtService = inject(DdtService);
+  private router = inject(Router);
 
   fornitori = signal<Fornitore[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
-
-  isModalOpen = signal(false);
-  selectedFornitore = signal<Fornitore | undefined>(undefined);
 
   async ngOnInit(): Promise<void> {
     await this.loadFornitori();
@@ -38,35 +36,13 @@ export default class Fornitori implements OnInit {
     }
   }
 
-  openCreateModal(): void {
-    this.selectedFornitore.set(undefined);
-    this.isModalOpen.set(true);
+  openCreatePage(): void {
+    this.router.navigate(['/admin/fornitori/create']);
   }
 
-  openEditModal(fornitore: Fornitore): void {
-    this.selectedFornitore.set(fornitore);
-    this.isModalOpen.set(true);
-  }
-
-  closeModal(): void {
-    this.isModalOpen.set(false);
-    this.selectedFornitore.set(undefined);
-  }
-
-  async saveFornitore(data: FornitoreInsert): Promise<void> {
-    try {
-      const selected = this.selectedFornitore();
-      if (selected?.id) {
-        await this.ddtService.updateFornitore(selected.id, data);
-      } else {
-        await this.ddtService.createFornitore(data);
-      }
-
-      this.closeModal();
-      await this.loadFornitori();
-    } catch (err) {
-      console.error('Errore nel salvataggio del fornitore:', err);
-      alert('Errore nel salvataggio del fornitore');
+  openEditPage(fornitore: Fornitore): void {
+    if (fornitore.id) {
+      this.router.navigate(['/admin/fornitori/edit', fornitore.id]);
     }
   }
 

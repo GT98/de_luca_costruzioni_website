@@ -5,6 +5,7 @@ import { Supabase } from '../../../services/supabase';
 import { Router } from '@angular/router';
 import { Lead, LeadType, LeadStatus } from '../../../models/lead';
 import { Paginator } from '../../../components/paginator/paginator';
+import { LeadService } from '../../../services/lead';
 
 @Component({
   selector: 'admin-lead-list',
@@ -16,6 +17,7 @@ import { Paginator } from '../../../components/paginator/paginator';
 export default class LeadList implements OnInit {
   private supabase = inject(Supabase);
   private router = inject(Router);
+  private leadService = inject(LeadService);
 
   loading = signal(false);
   allLeads = signal<Lead[]>([]);
@@ -153,8 +155,9 @@ export default class LeadList implements OnInit {
     this.selectedLead = lead;
 
     // Marca come letto
-    if (!lead.read) {
-      await this.toggleRead(lead, event, true);
+    if (!lead.read && lead.id) {
+      await this.leadService.markLeadAsRead(lead.id);
+      await this.loadLeads();
     }
   }
 
@@ -176,6 +179,9 @@ export default class LeadList implements OnInit {
       if (error) throw error;
 
       await this.loadLeads();
+      
+      // Aggiorna il contatore globale
+      await this.leadService.updateUnreadCount();
 
       if (this.selectedLead && this.selectedLead.id === lead.id) {
         this.selectedLead.read = newReadStatus;

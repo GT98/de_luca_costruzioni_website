@@ -1,24 +1,22 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { DdtService } from '../../../services/ddt.service';
 import { DDT } from '../../../models/ddt';
-import { DdtModal, DdtSaveData } from '../../../components/modals/ddt-modal';
 
 @Component({
   selector: 'app-ddt',
-  imports: [CommonModule, DdtModal],
+  imports: [CommonModule],
   templateUrl: './ddt.html',
   styleUrl: './ddt.scss',
 })
 export default class Ddt implements OnInit {
   private ddtService = inject(DdtService);
+  private router = inject(Router);
 
   ddtList = signal<DDT[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
-
-  isModalOpen = signal(false);
-  selectedDdt = signal<DDT | undefined>(undefined);
 
   async ngOnInit(): Promise<void> {
     await this.loadDdts();
@@ -38,35 +36,13 @@ export default class Ddt implements OnInit {
     }
   }
 
-  openCreateModal(): void {
-    this.selectedDdt.set(undefined);
-    this.isModalOpen.set(true);
+  openCreatePage(): void {
+    this.router.navigate(['/admin/ddt/create']);
   }
 
-  openEditModal(ddt: DDT): void {
-    this.selectedDdt.set(ddt);
-    this.isModalOpen.set(true);
-  }
-
-  closeModal(): void {
-    this.isModalOpen.set(false);
-    this.selectedDdt.set(undefined);
-  }
-
-  async saveDdt(data: DdtSaveData): Promise<void> {
-    try {
-      const selected = this.selectedDdt();
-      if (selected?.id) {
-        await this.ddtService.updateDdt(selected.id, data.ddt);
-      } else {
-        await this.ddtService.createDdt(data.ddt, data.materiali);
-      }
-
-      this.closeModal();
-      await this.loadDdts();
-    } catch (err) {
-      console.error('Errore nel salvataggio del DDT:', err);
-      alert('Errore nel salvataggio del DDT');
+  openEditPage(ddt: DDT): void {
+    if (ddt.id) {
+      this.router.navigate(['/admin/ddt/edit', ddt.id]);
     }
   }
 
