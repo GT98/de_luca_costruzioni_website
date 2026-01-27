@@ -1,7 +1,7 @@
 <div class="page-container">
   <div class="page-header">
     <h1>Gestione Fornitori</h1>
-    <button class="btn-primary" (click)="openCreateModal()">
+    <button class="btn-primary" (click)="openCreatePage()">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -63,7 +63,7 @@
           </td>
           <td>
             <div class="actions">
-              <button class="btn-icon" title="Modifica" (click)="openEditModal(fornitore)">
+              <button class="btn-icon" title="Modifica" (click)="openEditPage(fornitore)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -86,10 +86,4 @@
   </div>
   }
 
-  <app-fornitore-modal
-    [isOpen]="isModalOpen()"
-    [fornitore]="selectedFornitore()"
-    (onClose)="closeModal()"
-    (onSave)="saveFornitore($event)"
-  ></app-fornitore-modal>
 </div>

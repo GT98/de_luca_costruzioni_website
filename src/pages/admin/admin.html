@@ -31,6 +31,9 @@
                     <line x1="12" y1="15" x2="12" y2="3"></line>
                 </svg>
                 <span>Richieste</span>
+                @if (unreadLeadsCount() > 0) {
+                    <div class="badge">{{ unreadLeadsCount() }}</div>
+                }
             </a>
 
             <!-- Toggle this bool to switch ddt feature-->

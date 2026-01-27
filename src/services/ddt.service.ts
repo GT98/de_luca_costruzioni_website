@@ -67,6 +67,22 @@ export class DdtService {
     return data ?? [];
   }
 
+  async getCantiereById(id: number): Promise<Cantiere | null> {
+    const { data, error } = await this.supabase
+      .from('cantieri')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') { // No rows found
+        return null;
+      }
+      throw error;
+    }
+    return data;
+  }
+
   async createCantiere(cantiere: CantiereInsert): Promise<Cantiere> {
     const { data, error } = await this.supabase
       .from('cantieri')
@@ -108,6 +124,17 @@ export class DdtService {
 
     if (error) throw error;
     return data ?? [];
+  }
+
+  async getMateriale(id: number): Promise<Materiale> {
+    const { data, error } = await this.supabase
+      .from('materiali')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
   }
 
   async createMateriale(materiale: MaterialeInsert): Promise<Materiale> {

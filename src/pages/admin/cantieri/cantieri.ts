@@ -1,24 +1,22 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { DdtService } from '../../../services/ddt.service';
-import { Cantiere, CantiereInsert } from '../../../models/cantiere';
-import { CantiereModal } from '../../../components/modals/cantiere-modal';
+import { Cantiere } from '../../../models/cantiere';
 
 @Component({
   selector: 'app-cantieri',
-  imports: [CommonModule, CantiereModal],
+  imports: [CommonModule],
   templateUrl: './cantieri.html',
   styleUrl: './cantieri.scss',
 })
 export default class Cantieri implements OnInit {
   private ddtService = inject(DdtService);
+  private router = inject(Router);
 
   cantieri = signal<Cantiere[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
-
-  isModalOpen = signal(false);
-  selectedCantiere = signal<Cantiere | undefined>(undefined);
 
   async ngOnInit(): Promise<void> {
     await this.loadCantieri();
@@ -38,35 +36,13 @@ export default class Cantieri implements OnInit {
     }
   }
 
-  openCreateModal(): void {
-    this.selectedCantiere.set(undefined);
-    this.isModalOpen.set(true);
+  async navigateToCreate(): Promise<void> {
+    await this.router.navigate(['/admin/cantieri/create']);
   }
 
-  openEditModal(cantiere: Cantiere): void {
-    this.selectedCantiere.set(cantiere);
-    this.isModalOpen.set(true);
-  }
-
-  closeModal(): void {
-    this.isModalOpen.set(false);
-    this.selectedCantiere.set(undefined);
-  }
-
-  async saveCantiere(data: CantiereInsert): Promise<void> {
-    try {
-      const selected = this.selectedCantiere();
-      if (selected?.id) {
-        await this.ddtService.updateCantiere(selected.id, data);
-      } else {
-        await this.ddtService.createCantiere(data);
-      }
-
-      this.closeModal();
-      await this.loadCantieri();
-    } catch (err) {
-      console.error('Errore nel salvataggio del cantiere:', err);
-      alert('Errore nel salvataggio del cantiere');
+  async navigateToEdit(cantiere: Cantiere): Promise<void> {
+    if (cantiere.id) {
+      await this.router.navigate(['/admin/cantieri/edit', cantiere.id]);
     }
   }
 

@@ -1,24 +1,22 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { DdtService } from '../../../services/ddt.service';
-import { Materiale, MaterialeInsert } from '../../../models/materiale';
-import { MaterialeModal } from '../../../components/modals/materiale-modal';
+import { Materiale } from '../../../models/materiale';
 
 @Component({
   selector: 'app-materiali',
-  imports: [CommonModule, MaterialeModal],
+  imports: [CommonModule],
   templateUrl: './materiali.html',
   styleUrl: './materiali.scss',
 })
 export default class Materiali implements OnInit {
   private ddtService = inject(DdtService);
+  private router = inject(Router);
 
   materiali = signal<Materiale[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
-
-  isModalOpen = signal(false);
-  selectedMateriale = signal<Materiale | undefined>(undefined);
 
   async ngOnInit(): Promise<void> {
     await this.loadMateriali();
@@ -38,35 +36,13 @@ export default class Materiali implements OnInit {
     }
   }
 
-  openCreateModal(): void {
-    this.selectedMateriale.set(undefined);
-    this.isModalOpen.set(true);
+  openCreatePage(): void {
+    this.router.navigate(['/admin/materiali/create']);
   }
 
-  openEditModal(materiale: Materiale): void {
-    this.selectedMateriale.set(materiale);
-    this.isModalOpen.set(true);
-  }
-
-  closeModal(): void {
-    this.isModalOpen.set(false);
-    this.selectedMateriale.set(undefined);
-  }
-
-  async saveMateriale(data: MaterialeInsert): Promise<void> {
-    try {
-      const selected = this.selectedMateriale();
-      if (selected?.id) {
-        await this.ddtService.updateMateriale(selected.id, data);
-      } else {
-        await this.ddtService.createMateriale(data);
-      }
-
-      this.closeModal();
-      await this.loadMateriali();
-    } catch (err) {
-      console.error('Errore nel salvataggio del materiale:', err);
-      alert('Errore nel salvataggio del materiale');
+  openEditPage(materiale: Materiale): void {
+    if (materiale.id) {
+      this.router.navigate(['/admin/materiali/edit', materiale.id]);
     }
   }
 

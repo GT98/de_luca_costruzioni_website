@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Supabase } from './supabase';
 import { Lead, LeadInsert } from '../models/lead';
 
@@ -7,6 +7,8 @@ import { Lead, LeadInsert } from '../models/lead';
 })
 export class LeadService {
   private supabase = inject(Supabase);
+  
+  unreadLeadsCount = signal<number>(0);
 
   async saveContactLead(leadData: LeadInsert): Promise<Lead> {
     const { data, error } = await this.supabase
@@ -61,6 +63,31 @@ export class LeadService {
     if (error) {
       console.error('Errore aggiornamento lead:', error);
       throw error;
+    }
+    
+    await this.updateUnreadCount();
+  }
+
+  async getUnreadLeadsCount(): Promise<number> {
+    const { data, error } = await this.supabase
+      .from('leads')
+      .select('id')
+      .eq('read', false);
+
+    if (error) {
+      console.error('Errore conteggio leads non letti:', error);
+      return 0;
+    }
+
+    return data?.length ?? 0;
+  }
+
+  async updateUnreadCount(): Promise<void> {
+    try {
+      const count = await this.getUnreadLeadsCount();
+      this.unreadLeadsCount.set(count);
+    } catch (error) {
+      console.error('Errore nell\'aggiornamento contatore:', error);
     }
   }
 }
